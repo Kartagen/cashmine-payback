@@ -1,0 +1,112 @@
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { CircleIcon, RadioButtonIcon } from 'phosphor-react-native';
+import { api, type ClaimOptions } from '../../api';
+import { checkAmount, fromUnits } from '../../amount';
+import { useApp } from '../../store';
+import { color, space, type } from '../../theme';
+import { Btn, ErrorLine, Line, Page, s, Title, unresolved } from '../../ui';
+
+export default function ClaimScreen() {
+  const { items, claims, error: balError, load } = useApp();
+  const params = useLocalSearchParams<{ asset: string }>();
+  const [asset, setAsset] = useState(params.asset);
+  const [opts, setOpts] = useState<ClaimOptions | null>(null);
+  const [error, setError] = useState<unknown>(null);
+  const [amount, setAmount] = useState('');
+  const [dest, setDest] = useState<string | null>(null);
+  const [review, setReview] = useState(false);
+  const [sent, setSent] = useState(false); // one tap = one claim; a double tap must not create a second key
+  const it = items?.find((x) => x.asset === asset);
+  const isBusy = claims.list.some((t) => t.body.asset === asset && unresolved(t));
+
+  const loadOpts = useCallback(() => {
+    setOpts(null); setError(null);
+    api.claimOptions(asset).then((o) => { setOpts(o); setDest(o.destinations[0]?.id ?? null); }, setError);
+  }, [asset]);
+  useEffect(loadOpts, [loadOpts]);
+
+  // Deep link before balances load, or an unknown asset.
+  if (!items && balError != null) return <Page><Title>Claim</Title><ErrorLine error={balError} onRetry={load} /></Page>;
+  if (!items) return <Page><Title>Claim</Title><ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start' }} /></Page>;
+  if (!it) return <Page><Title>Claim</Title><Text style={type.body}>No balance for {asset}.</Text></Page>;
+
+  const check = opts ? checkAmount(amount, { decimals: it.decimals, available: it.available, minAmount: opts.minAmount, fee: opts.fee }) : null;
+
+  return (
+    <Page>
+      <Title>{review ? 'Confirm claim' : 'Claim'}</Title>
+      {!review && (
+        <View style={[s.divider, { flexDirection: 'row', gap: space.xl }]} accessibilityRole="tablist">
+          {items.map((x) => {
+            const on = x.asset === asset;
+            return (
+              <Pressable key={x.asset} accessibilityRole="tab" accessibilityState={{ selected: on }}
+                onPress={() => (setAsset(x.asset), setAmount(''))}
+                style={{ paddingVertical: space.s, borderBottomWidth: 2, borderColor: on ? color.text : 'transparent', marginBottom: -1 }}>
+                <Text style={[type.bodyStrong, !on && { color: color.secondary }]}>{x.asset}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
+
+      {!opts && !error && <ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start', marginTop: space.l }} />}
+      {error != null && <ErrorLine error={error} onRetry={loadOpts} />}
+
+      {opts && !review && (
+        <>
+          <Line label="Available" value={`${it.available} ${it.asset}`} />
+          <View style={s.row}>
+            <TextInput style={[s.input, { flex: 1 }]} value={amount} onChangeText={setAmount} inputMode="decimal"
+              placeholder={`Min ${opts.minAmount}`} placeholderTextColor={color.secondary} autoCorrect={false} />
+            <Btn title="Max" kind="secondary" onPress={() => setAmount(it.available)} />
+          </View>
+          {amount !== '' && check && !check.ok && <Text style={[type.footnote, { color: color.danger }]}>{check.error}</Text>}
+
+          <Text style={[type.footnote, { marginTop: space.m }]}>Send to</Text>
+          <View>
+            {opts.destinations.map((d) => {
+              const on = dest === d.id;
+              const I = on ? RadioButtonIcon : CircleIcon;
+              return (
+                <Pressable key={d.id} onPress={() => setDest(d.id)} accessibilityRole="radio" accessibilityState={{ checked: on }}
+                  style={[s.row, s.divider, { justifyContent: 'flex-start', paddingVertical: space.m }]}>
+                  <I size={20} color={on ? color.text : color.secondary} />
+                  <Text style={type.body}>{d.label}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+
+          <View style={[s.section, { marginTop: space.s }]}>
+            <Line label="Fee" value={`${opts.fee} ${asset}`} />
+            <Line label="You receive" value={check?.ok ? `${fromUnits(check.receive, it.decimals)} ${asset}` : '—'} strong />
+          </View>
+          {isBusy && <Text style={[type.footnote, { color: color.text }]}>A claim for {asset} is still in progress. Wait for it to finish.</Text>}
+          <Btn title="Review" disabled={!check?.ok || !dest || isBusy} onPress={() => setReview(true)} style={{ marginTop: space.s }} />
+        </>
+      )}
+
+      {opts && review && check?.ok && dest && (
+        <>
+          <View style={s.section}>
+            <Line label="Amount" value={`${check.amount} ${asset}`} />
+            <Line label="Fee" value={`−${opts.fee} ${asset}`} />
+            <Line label="To" value={opts.destinations.find((d) => d.id === dest)!.label} />
+          </View>
+          <View style={s.section}>
+            <Line label="You receive" value={`${fromUnits(check.receive, it.decimals)} ${asset}`} strong />
+          </View>
+          <Btn title="Confirm and claim" disabled={sent} style={{ marginTop: space.s }}
+            onPress={() => {
+              setSent(true);
+              router.replace(`/status/${claims.submit({ asset, amount: check.amount, destinationId: dest })}`);
+            }} />
+          <Btn title="Edit" kind="secondary" disabled={sent} onPress={() => setReview(false)} />
+        </>
+      )}
+    </Page>
+  );
+}

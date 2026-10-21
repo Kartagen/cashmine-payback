@@ -4,7 +4,8 @@ const TOKEN_KEY = 'cm.token';
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 /** Claims tracked on this device belong to the old token, so they are dropped too. */
 export const setToken = (t: string | null) => {
-  t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY);
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem('cm.claims');
 };
 
