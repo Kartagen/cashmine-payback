@@ -1,3 +1,6 @@
+import type { Balance, Balances } from './api';
+import type { Tracked } from './claims';
+
 // Amounts are decimal strings from the API. We convert them to BigInt "base units"
 // (amount * 10^decimals) so that math is exact even for ETH's 18 decimals.
 
@@ -56,4 +59,27 @@ export function formatUsd(cents: bigint): string {
   const s = fromUnits(cents, 2);
   const [i, f = ''] = s.split('.');
   return '$' + i.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + f.padEnd(2, '0');
+}
+
+/**
+ * Balance shown = server snapshot, plus our own claims that the snapshot does not include yet
+ * (claim.createdAt > asOf). Once a newer snapshot arrives the overlay drops away by itself,
+ * so the number never jumps back. Failed claims are never overlaid: their money is available again.
+ */
+export function applyClaims(b: Balances, tracked: Tracked[]): (Balance & { adjusted: boolean })[] {
+  return b.items.map((it) => {
+    let avail = toUnits(it.available, it.decimals);
+    let claiming = toUnits(it.claiming, it.decimals);
+    let adjusted = false;
+    for (const t of tracked) {
+      const c = t.claim;
+      if (!c || c.asset !== it.asset || c.status === 'failed' || c.createdAt <= b.asOf) continue;
+      const amt = toUnits(c.amount, it.decimals);
+      avail -= amt;
+      if (c.status === 'pending') claiming += amt;
+      adjusted = true;
+    }
+    if (avail < 0n) avail = 0n;
+    return { ...it, available: fromUnits(avail, it.decimals), claiming: fromUnits(claiming, it.decimals), adjusted };
+  });
 }

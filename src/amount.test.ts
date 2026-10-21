@@ -1,7 +1,7 @@
 // Run with: npm test (Node's built-in test runner, no Jest setup needed)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { toUnits, fromUnits, checkAmount, usdCents, formatUsd } from './amount.ts';
+import { toUnits, fromUnits, checkAmount, usdCents, formatUsd, applyClaims } from './amount.ts';
 
 test('parse and format round-trip, including 18 decimals', () => {
   assert.equal(toUnits('12.345678901234591676', 18), 12345678901234591676n);
@@ -39,4 +39,26 @@ test('USD totals are exact to the cent', () => {
   assert.equal(usdCents('820.413207', 6, '1.0002'), 82058n); // 820.5772896... -> $820.58
   assert.equal(formatUsd(123456789n), '$1,234,567.89');
   assert.equal(formatUsd(5n), '$0.05');
+});
+
+test('claim overlay: applied until the snapshot catches up, never for failed claims', () => {
+  const snap = (asOf: string, available: string, claiming: string) => ({
+    asOf,
+    items: [{ asset: 'BTC', decimals: 8, available, pending: '0', claiming, usdPrice: '1' }],
+  });
+  const claim = (status: 'pending' | 'completed' | 'failed') => ({
+    key: 'k',
+    body: { asset: 'BTC', amount: '0.001', destinationId: 'd' },
+    claim: { id: 'c', asset: 'BTC', amount: '0.001', destinationId: 'd', fee: '0', receiveAmount: '0.001',
+      status, failureReason: null, createdAt: '2026-10-21T14:00:10Z', updatedAt: '' },
+  });
+  // stale snapshot (before claim): overlay subtracts
+  let [b] = applyClaims(snap('2026-10-21T14:00:00Z', '0.01', '0'), [claim('pending')]);
+  assert.deepEqual([b.available, b.claiming, b.adjusted], ['0.009', '0.001', true]);
+  // fresh snapshot already includes the claim: no double subtract
+  [b] = applyClaims(snap('2026-10-21T14:00:15Z', '0.009', '0.001'), [claim('pending')]);
+  assert.deepEqual([b.available, b.claiming, b.adjusted], ['0.009', '0.001', false]);
+  // failed: money is back, no overlay
+  [b] = applyClaims(snap('2026-10-21T14:00:00Z', '0.01', '0'), [claim('failed')]);
+  assert.deepEqual([b.available, b.adjusted], ['0.01', false]);
 });
