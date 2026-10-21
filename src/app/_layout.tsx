@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Platform, Pressable, Text, TextInput } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { useFonts } from 'expo-font';
 import { CaretLeftIcon } from 'phosphor-react-native';
 import { getToken, setToken } from '../api';
 import { AppProvider } from '../store';
@@ -12,7 +12,11 @@ import { Btn, Page, s } from '../ui';
 const web = Platform.OS === 'web';
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
+  const [fontsLoaded, fontError] = useFonts({ // local copies: Vercel skips node_modules paths, so fonts can't be served from the package
+    Inter_400Regular: require('../../assets/fonts/Inter_400Regular.ttf'),
+    Inter_500Medium: require('../../assets/fonts/Inter_500Medium.ttf'),
+    Inter_600SemiBold: require('../../assets/fonts/Inter_600SemiBold.ttf'),
+  });
   const [hasToken, setHasToken] = useState(!!getToken());
   if (!fontsLoaded && !fontError) return null;
   return (
