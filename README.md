@@ -1,6 +1,6 @@
 # CashMine payback (practical task)
 
-**Live:** LIVE_URL
+**Live:** https://cashmine-payback-two.vercel.app
 
 ## Run locally
 
