@@ -10,8 +10,16 @@ export const errText = (e: unknown) =>
 export const activityLabel = (a: Activity) => a.type[0].toUpperCase() + a.type.slice(1);
 export const unresolved = (t: Tracked) => !t.error && (!t.claim || t.claim.status === 'pending');
 
+// Web: reserve the scrollbar's space on both edges, so the centered column doesn't shift when content starts to overflow.
+export const gutter = (Platform.OS === 'web' ? { scrollbarGutter: 'stable both-edges' } : {}) as ViewStyle;
+export const scrollStyle: ViewStyle = { flex: 1, backgroundColor: color.bg, ...gutter };
+
+export const Loader = () => (
+  <View style={{ alignItems: 'center', paddingVertical: space.xxl }}><ActivityIndicator color={color.text} /></View>
+);
+
 export function Page({ children }: { children: React.ReactNode }) {
-  return <ScrollView style={{ flex: 1, backgroundColor: color.bg }} contentContainerStyle={s.page} contentInsetAdjustmentBehavior="automatic">{children}</ScrollView>;
+  return <ScrollView style={scrollStyle} contentContainerStyle={s.page} contentInsetAdjustmentBehavior="automatic">{children}</ScrollView>;
 }
 
 // iOS shows the native large title and Android the app bar title; only web draws it in content.

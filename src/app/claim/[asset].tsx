@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { CircleIcon, RadioButtonIcon } from 'phosphor-react-native';
 import { api, type ClaimOptions } from '../../api';
 import { checkAmount, fromUnits } from '../../amount';
 import { useApp } from '../../store';
 import { color, space, type } from '../../theme';
-import { Btn, ErrorLine, Line, Page, s, Title, unresolved } from '../../ui';
+import { Btn, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../../ui';
 
 export default function ClaimScreen() {
   const { items, claims, error: balError, load } = useApp();
@@ -29,7 +29,7 @@ export default function ClaimScreen() {
 
   // Deep link before balances load, or an unknown asset.
   if (!items && balError != null) return <Page><Title>Claim</Title><ErrorLine error={balError} onRetry={load} /></Page>;
-  if (!items) return <Page><Title>Claim</Title><ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start' }} /></Page>;
+  if (!items) return <Page><Title>Claim</Title><Loader /></Page>;
   if (!it) return <Page><Title>Claim</Title><Text style={type.body}>No balance for {asset}.</Text></Page>;
 
   const check = opts ? checkAmount(amount, { decimals: it.decimals, available: it.available, minAmount: opts.minAmount, fee: opts.fee }) : null;
@@ -52,7 +52,7 @@ export default function ClaimScreen() {
         </View>
       )}
 
-      {!opts && !error && <ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start', marginTop: space.l }} />}
+      {!opts && !error && <Loader />}
       {error != null && <ErrorLine error={error} onRetry={loadOpts} />}
 
       {opts && !review && (

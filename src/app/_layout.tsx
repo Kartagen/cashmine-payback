@@ -7,7 +7,7 @@ import { CaretLeftIcon } from 'phosphor-react-native';
 import { getToken, setToken } from '../api';
 import { AppProvider } from '../store';
 import { color, type } from '../theme';
-import { Btn, Page, s } from '../ui';
+import { Btn, gutter, Page, s } from '../ui';
 
 const web = Platform.OS === 'web';
 
@@ -49,7 +49,7 @@ export default function RootLayout() {
 
 // Same column as the page, so Back lines up with the content instead of the window edge.
 const WebHeader = () => (
-  <View style={{ backgroundColor: color.bg }}>
+  <View style={[gutter, { backgroundColor: color.bg, overflow: 'hidden' }]}>{/* same gutter as the page scroller */}
     <View style={[s.column, { height: 44, justifyContent: 'center' }]}>
       <Pressable onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
         accessibilityRole="button" accessibilityLabel="Back" hitSlop={12} style={{ alignSelf: 'flex-start', marginLeft: -4 }}>

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { CaretRightIcon } from 'phosphor-react-native';
 import { api, type Activity } from '../../api';
 import { color, num, space, type } from '../../theme';
 import { activityCache } from '../../store';
-import { activityLabel, Btn, ErrorLine, s, Title } from '../../ui';
+import { activityLabel, Btn, ErrorLine, Loader, s, scrollStyle, Title } from '../../ui';
 
 export default function ActivityScreen() {
   const [items, setItems] = useState<Activity[]>([]);
@@ -34,7 +34,7 @@ export default function ActivityScreen() {
 
   return (
     <FlatList
-      style={{ flex: 1, backgroundColor: color.bg }}
+      style={scrollStyle}
       contentContainerStyle={s.page}
       contentInsetAdjustmentBehavior="automatic"
       ListHeaderComponent={<Title>Activity</Title>}
@@ -55,7 +55,7 @@ export default function ActivityScreen() {
       )}
       ListFooterComponent={
         error != null ? <ErrorLine error={error} onRetry={more} />
-        : loading ? <ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start', marginVertical: space.l }} />
+        : loading ? <Loader />
         : cursor === null ? (items.length
           ? <Text style={[type.footnote, { marginVertical: space.l }]}>End of history</Text>
           : <Text style={[type.body, { textAlign: 'center', color: color.secondary, marginTop: space.xxl }]}>No activity yet</Text>)

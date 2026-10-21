@@ -7,7 +7,7 @@
 - Prefer hairline dividers and whitespace over cards. Only use a card when content is genuinely a separate object.
 - Typography: "Söhne" for UI, tabular numbers for data. Use the type scale in theme.ts only.
 - Icons: Phosphor, regular weight, never inside colored circles. No emoji in UI.
-- Left-align content. Don't center things unless it's an empty state.
+- Left-align content. Don't center things unless it's an empty or loading state (use `Loader` from src/ui.tsx).
 - Copy: short, specific, no exclamation marks, no "Welcome back!" greetings.
 - Follow platform conventions: iOS large titles and native stack, Android Material back behavior.
 - Söhne is a paid license and is not bundled: the stack is Söhne → Inter (bundled) → system-ui.

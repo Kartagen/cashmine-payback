@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { CaretRightIcon } from 'phosphor-react-native';
 import { setToken } from '../api';
 import { formatUsd, toUnits, usdCents } from '../amount';
 import { useApp, type Shown } from '../store';
 import { color, num, space, type } from '../theme';
-import { Btn, ClaimBanner, ErrorLine, Line, Page, s, Title, unresolved } from '../ui';
+import { Btn, ClaimBanner, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../ui';
 
 export default function Home() {
   const { claims, bal, items, error, loading, load } = useApp();
@@ -24,7 +24,7 @@ export default function Home() {
         </View>
       )}
 
-      {!bal && loading && <ActivityIndicator color={color.text} style={{ alignSelf: 'flex-start', marginTop: space.xl }} />}
+      {!bal && loading && <Loader />}
       {error != null && <ErrorLine error={bal ? `Could not refresh. ${errMsg(error)}` : error} onRetry={load} />}
 
       {bal && items && (
