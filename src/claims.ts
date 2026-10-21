@@ -14,9 +14,11 @@ const load = (): Tracked[] => JSON.parse(localStorage.getItem(KEY) ?? '[]');
 
 export function useClaims() {
   // A claim still "sending" when the page closed has an unknown outcome: resume it.
-  const [list, setList] = useState<Tracked[]>(() =>
-    load().map((t) => (!t.claim && !t.error ? { ...t, unknown: true } : t)),
-  );
+  const [list, setList] = useState<Tracked[]>(() => {
+    const l = load().map((t) => (!t.claim && !t.error ? { ...t, unknown: true } : t));
+    localStorage.setItem(KEY, JSON.stringify(l));
+    return l;
+  });
 
   const update = useCallback((key: string, patch: Partial<Tracked>) => {
     setList((l) => {

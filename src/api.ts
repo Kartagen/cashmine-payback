@@ -2,8 +2,11 @@ export const BASE_URL = 'https://task-api.cashmine.io';
 
 const TOKEN_KEY = 'cm.token';
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
-export const setToken = (t: string | null) =>
+/** Claims tracked on this device belong to the old token, so they are dropped too. */
+export const setToken = (t: string | null) => {
   t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem('cm.claims');
+};
 
 export type Balance = {
   asset: string; decimals: number; available: string; pending: string; claiming: string; usdPrice: string;
