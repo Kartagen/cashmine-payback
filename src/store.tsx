@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { api, type Activity, type Balances, type ClaimOptions } from './api';
 import { applyClaims } from './amount';
 import { useClaims } from './claims';
@@ -12,17 +12,20 @@ function useAppState() {
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
 
+  // Polls can overlap. Data from any of them is kept if it's newer (asOf), but only the latest
+  // request decides error/loading, so an old failure can't show "Could not refresh" over fresh data.
+  const seq = useRef(0);
   const load = useCallback(async () => {
+    const my = ++seq.current;
     setLoading(true);
     try {
       const b = await api.balances();
-      // Ignore a response older than what we already show (responses can arrive out of order).
       setBal((cur) => (cur && Date.parse(cur.asOf) > Date.parse(b.asOf) ? cur : b));
-      setError(null);
+      if (my === seq.current) setError(null);
     } catch (e) {
-      setError(e);
+      if (my === seq.current) setError(e);
     } finally {
-      setLoading(false);
+      if (my === seq.current) setLoading(false);
     }
   }, []);
 

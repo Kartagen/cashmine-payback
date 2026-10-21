@@ -6,7 +6,7 @@ import { setToken } from '../api';
 import { formatUsd, toUnits, usdCents } from '../amount';
 import { useApp, type Shown } from '../store';
 import { color, num, space, type } from '../theme';
-import { Btn, ClaimBanner, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../ui';
+import { Btn, ClaimBanner, errText, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../ui';
 
 export default function Home() {
   const { claims, bal, items, error, loading, load } = useApp();
@@ -25,7 +25,7 @@ export default function Home() {
       )}
 
       {!bal && loading && <Loader />}
-      {error != null && <ErrorLine error={bal ? `Could not refresh. ${errMsg(error)}` : error} onRetry={load} />}
+      {error != null && <ErrorLine error={bal ? `Could not refresh. ${errText(error)}` : error} onRetry={load} />}
 
       {bal && items && (
         <>
@@ -57,8 +57,6 @@ export default function Home() {
     </Page>
   );
 }
-
-const errMsg = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
 function Freshness({ asOf }: { asOf: string }) {
   const [now, setNow] = useState(() => Date.now());

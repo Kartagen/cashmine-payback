@@ -30,7 +30,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "node --test src/amount.test.ts",
+    "test": "node --test src/*.test.ts",
     "lint": "expo lint"
   },
   "private": true

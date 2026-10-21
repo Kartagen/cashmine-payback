@@ -27,14 +27,13 @@ export type Claim = ClaimBody & {
 };
 
 export class ApiError extends Error {
-  constructor(
-    public status: number, // 0 = network error / client timeout
-    public code: string,
-    message: string,
-    public field?: string,
-    public retryAfterMs?: number,
-  ) {
+  status: number; // 0 = network error / client timeout
+  code: string;
+  field?: string;
+  retryAfterMs?: number;
+  constructor(status: number, code: string, message: string, field?: string, retryAfterMs?: number) {
     super(message);
+    this.status = status; this.code = code; this.field = field; this.retryAfterMs = retryAfterMs;
   }
   /** The server may or may not have done the work (timeout, lost response, 5xx). */
   get outcomeUnknown() {
@@ -43,18 +42,30 @@ export class ApiError extends Error {
 }
 
 const TIMEOUT_MS = 15000;
+
+/** Retry-After is either seconds or an HTTP date; anything else falls back to 1 s. */
+export const parseRetryAfter = (h: string | null): number => {
+  if (h == null) return 1000;
+  const sec = Number(h);
+  if (h.trim() !== '' && Number.isFinite(sec) && sec >= 0) return sec * 1000;
+  const at = Date.parse(h);
+  return Number.isNaN(at) ? 1000 : Math.max(0, at - Date.now());
+};
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function once<T>(path: string, init: RequestInit = {}): Promise<T> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   let res: Response;
+  let body;
   try {
     res = await fetch(BASE_URL + path, {
       ...init,
       signal: ctrl.signal,
       headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json', ...init.headers },
     });
+    // Read the body under the same timeout: a response can stall after its headers.
+    body = await res.json().catch((e) => { if (ctrl.signal.aborted) throw e; return null; });
   } catch (e) {
     // fetch rejects synchronously-invalid requests (e.g. non-ASCII token in the header) with a TypeError.
     // Nothing was sent, so this is a definite failure, not an unknown outcome.
@@ -64,10 +75,9 @@ async function once<T>(path: string, init: RequestInit = {}): Promise<T> {
   } finally {
     clearTimeout(timer);
   }
-  const body = await res.json().catch(() => null);
   if (!res.ok) {
     const e = body?.error ?? {};
-    const retry = e.retryAfterMs ?? Number(res.headers.get('Retry-After') ?? 1) * 1000;
+    const retry = e.retryAfterMs ?? parseRetryAfter(res.headers.get('Retry-After'));
     throw new ApiError(res.status, e.code ?? 'SERVER', e.message ?? `HTTP ${res.status}`, e.field, retry);
   }
   return body as T;
