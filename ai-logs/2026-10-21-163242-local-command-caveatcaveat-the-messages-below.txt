@@ -1,0 +1,1991 @@
+ ▐▛███▛█   Claude Code v2.1.284
+▝▜██████▀  Opus 5.5 · Claude Max
+ ▝▝   ▝▝   ~/Project/cashmineTest
+
+
+❯ for start context, save it to some md file and remember it Hi Illia Vysochyn, 
+                                                                                
+  Thank you for applying to CashMine. We would like to invite you to the next   
+  step, a 2-hour practical task.                                                
+                                                                                
+  What: build a small slice of our app in React Native (Expo, TypeScript)       
+  against a test API we host. We send the brief and your API token by email at  
+  the start time we confirm, and your 2 hours start then. We do not send any    
+  files or code to run.                                                         
+  AI tools: allowed and expected. We will ask you to include your AI            
+  conversations with your submission.                                           
+  Before you start: make sure you can create and run a new Expo app on an iOS   
+  simulator, an Android emulator or Expo Go. You will also need Node.js and a   
+  GitHub account.                                                               
+  Please reply with three possible start times in UTC, between 2026-10-20 00:00 
+  UTC and 2026-10-26 22:00 UTC, for example:                                    
+                                                                                
+  2026-10-20 19:00 UTC                                                          
+  2026-10-21 19:00 UTC                                                          
+  2026-10-22 19:00 UTC                                                          
+  We will confirm one of them.                                                  
+                                                                                
+  After the task, the remaining steps are a technical interview (which includes 
+  a walkthrough of your task), a culture-fit interview, a reference check and   
+  an offer.                                                                     
+                                                                                
+  Best regards,                                                                 
+  Ivan                                                                          
+  CashMine                                                                      
+                                                                                
+  Illia Vysochyn                                                                
+  Oct 19, 2026, 11:36 PM (2 days ago)                                           
+  - 2026-10-21 14:00 UTC - 2026-10-22 14:00 UTC - 2026-10-23 14:00 UTC          
+                                                                                
+  Ivan K                                                                        
+  Oct 20, 2026, 4:43 AM (1 day ago)                                             
+  to me                                                                         
+                                                                                
+  Hi Illia Vysochyn,                                                            
+                                                                                
+  Your start time is confirmed: 2026-10-21 14:00 UTC. The brief and your API    
+  token will arrive in this thread at that time, and your 2 hours start then.   
+  Please check your spam folder if you do not see them.                         
+                                                                                
+  One change from our first email: please still build the app with Expo (React  
+  Native, TypeScript), but deliver it as a web app that we can open on a phone. 
+  You will deploy the web build and send us the live link and a public GitHub   
+  repository. It does not need to run on iOS or Android.                        
+                                                                                
+  Before your start time, please check that:                                    
+                                                                                
+  a new Expo app runs in your browser (npx expo start --web)                    
+  you can deploy a static site to a host of your choice, for example EAS        
+  Hosting, Vercel, Netlify or Cloudflare Pages                                  
+  Answers to questions we received:                                             
+                                                                                
+  Submission: a link to a public GitHub repository with your full commit        
+  history, and the live link.                                                   
+  AI tools: AI may write code. Your AI conversations go in an ai-logs/ folder   
+  in the repository. Exports, share links or screenshots are all fine.          
+  Libraries: use any you like (state, navigation, testing), as long as they     
+  work on web.                                                                  
+  Brief and API: the brief and the API documentation arrive with your token at  
+  the start time.                                                               
+  Your code: the task is for evaluation only. We will not use your code in our  
+  product.                                                                      
+  Best regards,                                                                 
+  Ivan                                                                          
+  CashMine                                                                      
+
+⏺ Write(CONTEXT.md)
+  ⎿  Wrote 31 lines to CONTEXT.md
+       1 # CashMine practical task — context
+       2 
+       3 **Candidate:** Illia Vysochyn · **Contact:** Ivan K (CashMine)
+       5 ## Schedule
+       6 - **Start: 2026-10-21 14:00 UTC**, 2 hours from then.
+       7 - The brief, API docs and API token arrive by email in the same 
+         thread at the start time. Check the spam folder too.
+       9 ## What to build
+      10 - A small part of the CashMine app, built with **Expo + React Na
+         tive + TypeScript**, using CashMine's hosted test API.
+     … +32 lines (ctrl+o to expand)
+
+⏺ I saved the task details to CONTEXT.md in the project folder and to my
+  persistent memory, so I'll have them in future sessions too.
+
+  I also checked item on the pre-flight list:
+  - Node.js: v25.2.1 is installed. Expo officially supports the LTS versions (22
+    or 24), so v25 might cause problems.
+
+  Still to check before 14:00 UTC:
+  - Create a new Expo app and run it in the browser with npx expo start --web.
+  - Do a test deploy to a host. I suggest Vercel or EAS Hosting.
+
+  I can run both now in a scratch folder if you want.
+
+  When the brief arrives, send it to me. Remember to export this conversation
+  into the repo's ai-logs/ folder at the end.
+
+✻ Cooked for 19s · done 4:00 PM
+
+❯ Hi Illia Vysochyn,                                                            
+                                                                                
+  As scheduled, here is your practical task. You have 2 hours from the time     
+  this email was sent (2026-10-21 14:00 to 16:00 UTC).                          
+                                                                                
+  1. Context                                                                    
+                                                                                
+  CashMine pays users back part of the trading fees they pay on crypto          
+  exchanges. We call this payback. It is live on web, and the iOS/Android app   
+  is next. In this task you build a slice of that app: seeing payback balances  
+  and claiming them. The money is real for our users, so correctness matters    
+  more than polish.                                                             
+                                                                                
+  You build it with React Native (Expo) and ship the web build, so that we can  
+  open it on a phone from a link.                                               
+                                                                                
+  2. Setup                                                                      
+                                                                                
+  Create a new Expo app with TypeScript (for example npx                        
+  create-expo-app@latest). Use any libraries you like, as long as they work on  
+  web.                                                                          
+  Run it in the browser (npx expo start --web) and design for a phone screen,   
+  about 390 px wide. We will open your link on a phone. It does not need to run 
+  on iOS or Android.                                                            
+  We host a test API for this task. Its documentation:                          
+  https://task-api.cashmine.io/docs                                             
+  Your personal token:
+  It is valid for 24 hours, until 2026-10-22 14:00 UTC. All data is fake and    
+  private to your token.                                                        
+  Treat the API as a real remote server that you call but cannot change.        
+  Do not put the token in your code, your repository or your deployed build. On 
+  first open, the app asks for the token (a text field is enough), keeps it in  
+  the browser and offers a way to change it. We will open your link with our    
+  own tokens.                                                                   
+  Keep the API base URL in one place in your code.                              
+  If the API is unavailable during your slot, say so in your submission email   
+  and we will offer you a new slot.                                             
+                                                                                
+  3. What to build                                                              
+                                                                                
+  The items are in priority order. Doing fewer things correctly is better than  
+  doing everything halfway.                                                     
+                                                                                
+  Balances (Home). Show each asset's balances, the total in USD, and how fresh  
+  the data is. Include loading, error/retry and refresh states.                 
+  Claim. The user picks an asset and enters an amount or taps Max. They see the 
+  fee and the amount they will receive, then confirm and submit. Afterwards     
+  they can follow the claim until it completes or fails. Validate input against 
+  the rules in the API documentation.                                           
+  Tests. Write a few unit tests for your amount logic: parsing, validation, fee 
+  and totals.                                                                   
+  Activity (if time allows). Show a paginated history of accruals, reversals    
+  and claims.                                                                   
+  4. Decisions we leave to you                                                  
+                                                                                
+  Each of these has more than one reasonable answer. Pick one and tell us why.  
+                                                                                
+  How you represent and calculate amounts.                                      
+  What the balance shows right after a claim is submitted. Two pieces of user   
+  feedback pull in opposite directions. One user said: "I claimed and my        
+  balance didn't change, so I claimed again." Another said: "My balance         
+  dropped, then jumped back up, and I stopped trusting the app."                
+  What the user sees, and what the app does, when the result of a claim request 
+  is unknown, for example after a timeout.                                      
+  5. AI tools                                                                   
+                                                                                
+  Use any AI tools you like: chat, IDE assistants or coding agents. AI may      
+  write code. We expect you to use these tools, and we care about how you work  
+  with them, not whether you do.                                                
+                                                                                
+  Keep your AI conversations and put them in ai-logs/ in your repository. You   
+  can export them, add share links or copy-paste them. If your tool cannot      
+  export, screenshots are fine. Do not tidy them up, because messy prompts are  
+  normal. The repository is public, so remove anything private, including your  
+  token.                                                                        
+  For the balance-after-claim decision, ask your AI for at least two approaches 
+  before you choose. We want to see that conversation.                          
+  Commit at least every 30 minutes and do not squash your commits. Your history 
+  is part of the submission.                                                    
+  6. Notes                                                                      
+                                                                                
+  Add a NOTES.md of about one page with three sections:                         
+                                                                                
+  Decisions. Cover the three decisions above and any others that matter: what   
+  you chose, what the alternatives were, and why.                               
+  Working with AI. Describe three moments and point to where each one is in     
+  ai-logs/:                                                                     
+  a prompt that did not get you what you wanted, and how you changed it         
+  a time AI output was wrong or risky, and how you found out                    
+  a time you disagreed with the AI or rejected a suggestion, and why            
+  Not done / known issues. Say what is missing or wrong and what you would do   
+  next.                                                                         
+  README.md only needs the live link, how to run the app locally and what       
+  works.                                                                        
+                                                                                
+  7. Submission                                                                 
+                                                                                
+  Before 2026-10-21 16:00 UTC, reply to this email with:                        
+                                                                                
+  the link to a public GitHub repository with your full commit history          
+  the live link to your deployed web build. Any static host works, for example  
+  EAS Hosting, Vercel, Netlify or Cloudflare Pages. npx expo export --platform  
+  web builds it.                                                                
+  roughly how long you spent                                                    
+  Deploy early, for example once the first screen works, so that hosting        
+  problems do not eat your last minutes. Do not push or redeploy after          
+  2026-10-21 16:00 UTC.                                                         
+                                                                                
+  8. What we look at                                                            
+                                                                                
+  Whether money handling and the claim flow are correct                         
+  Your decisions and how you explain them                                       
+  How you work with AI: the context you give it, how you check its output, and  
+  where you push back                                                           
+  Your React Native implementation and UX states on a phone screen              
+  How clear your notes are                                                      
+  In the next interview we will walk through your code together. You will also  
+  make a small change live, using your AI tool, while sharing your screen.      
+  Please be ready to explain any line you submitted.                            
+                                                                                
+  We do not answer questions during the task. If something is unclear, make a   
+  reasonable assumption, write it in NOTES.md and keep going.                   
+                                                                                
+  Good luck,                                                                    
+  Ivan                                                                          
+  CashMine                                                                      
+
+⏺ Bash(date -u; curl -s -m 20 https://task-api.cashmine.io/docs | head -c 3000;
+      echo; curl -s -m 20 -o /dev/null -w "%{content_type}\n"
+      https://task-api.cashmine.io/do…)
+  ⎿  Wed Oct 21 14:01:16 UTC 2026
+     CashMine practical task API
+     ===========================
+     … +89 lines (ctrl+o to expand)
+
+⏺ Bash(curl -s -m 20 https://task-api.cashmine.io/docs | tail -c +3000)
+  ⎿  edAt": "...", "relatedId": null }
+           ],
+           "nextCursor": "..."
+     … +53 lines (ctrl+o to expand)
+
+⏺ Bash(npx -y create-expo-app@latest app --template blank-typescript --yes 2>&1
+      | tail -5; ls app)
+  ⎿  - npm run web
+
+     A new version of `create-expo` is available
+     … +13 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Bash(T='ct1.<REDACTED>
+      <REDACTED>'
+      B=https://ta…)
+  ⎿  {
+       "asOf": "2026-10-21T14:01:59.325Z",
+       "items": [
+     … +76 lines (ctrl+o to expand)
+
+⏺ Bash(cd app && cat package.json tsconfig.json CLAUDE.md AGENTS.md | head -80;
+      cat ../.gitignore 2>/dev/null; ls -a)
+  ⎿  {
+       "name": "app",
+       "version": "1.0.0",
+     … +93 lines (ctrl+o to expand)
+
+⏺ Bash(npx expo install react-dom react-native-web 2>&1 | tail -2; git log
+      --oneline | head; (npx -y vercel whoami 2>&1 | tail -1) ; (npx -y
+      eas-cli@latest whoami 2>&1…)
+  ⎿  Run `npm audit` for details.
+     9484456 Initial commit
+     > Run `vercel deploy --temporary` to create a temporary deployment you
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated app/package-lock.json (+208 -1)
+      11          "expo": "~58.0.16",
+      12          "expo-status-bar": "~58.0.3",
+      13          "react": "19.3.0",
+      14 -        "react-native": "0.88.0"                               
+      14 +        "react-dom": "19.3.0",                                 
+      15 +        "react-native": "0.88.0",                              
+      16 +        "react-native-web": "^0.21.4"                          
+      17        },
+      18        "devDependencies": {
+      19          "@types/react": "~19.3.0",
+     ...
+      2579          "url": "https://opencollective.com/core-js"
+      2580        }
+      2581      },
+      2582 +    "node_modules/cross-fetch": {                            
+      2583 +      "version": "3.2.0",                                    
+      2584 +      "resolved": "https://registry.npmjs.org/cross-fetch/-/c
+           +ross-fetch-3.2.0.tgz",                                       
+      2585 +      "integrity": "sha512-Q+xVJLoGOeIMXZmbUK4HYk+69cQH6LudR0
+           +Vu/pRm2YlU/hDV9CiS0gKUMaWY5f2NeUH9C1nV3bsTlCo0FsTV1Q==",     
+      2586 +      "license": "MIT",                                      
+      2587 +      "dependencies": {                                      
+      2588 +        "node-fetch": "^2.7.0"                               
+      2589 +      }                                                      
+      2590 +    },                                                       
+      2591      "node_modules/cross-spawn": {
+      2592        "version": "7.0.6",
+      2593        "resolved": "https://registry.npmjs.org/cross-spawn/-/c
+            ross-spawn-7.0.6.tgz",
+     ...
+      2602          "node": ">= 8"
+      2603        }
+      2604      },
+      2605 +    "node_modules/css-in-js-utils": {                        
+      2606 +      "version": "3.1.0",                                    
+      2607 +      "resolved": "https://registry.npmjs.org/css-in-js-utils
+           +/-/css-in-js-utils-3.1.0.tgz",                               
+      2608 +      "integrity": "sha512-fJAcud6B3rRu+KHYk+Bwf+WFL2MDCJJ1XG
+           +9x137tJQ0xYxor7XziQtuGFbWNdqrvF4Tk26O3H73nfVqXt/fW1A==",     
+      2609 +      "license": "MIT",                                      
+      2610 +      "dependencies": {                                      
+      2611 +        "hyphenate-style-name": "^1.0.3"                     
+      2612 +      }                                                      
+      2613 +    },                                                       
+      2614      "node_modules/csstype": {
+      2615        "version": "3.2.3",
+      2616        "resolved": "https://registry.npmjs.org/csstype/-/cssty
+            pe-3.2.3.tgz",
+     … 277 more lines (ctrl+o to expand)
+  ⎿  Updated app/package.json (+3 -1)
+       6      "expo": "~58.0.16",
+       7      "expo-status-bar": "~58.0.3",
+       8      "react": "19.3.0",
+       9 -    "react-native": "0.88.0"                                   
+       9 +    "react-dom": "19.3.0",                                     
+      10 +    "react-native": "0.88.0",                                  
+      11 +    "react-native-web": "^0.21.4"                              
+      12    },
+      13    "devDependencies": {
+      14      "@types/react": "~19.3.0",
+  ⎿  (timeout 5m)
+
+⏺ I've scaffolded the app, confirmed via the live API that ETH uses 18 decimals,
+  and am now writing the amount logic using BigInt for precision. Meanwhile, I
+  need you to log in to a host (Vercel or EAS CLI).
+
+⏺ Write(app/src/amount.ts)
+  ⎿  Wrote 59 lines to app/src/amount.ts
+       1 // Amounts are decimal strings from the API. We convert them to 
+         BigInt "base units"
+         8 decimals.
+       3 
+       4 const API_FORMAT = /^(0|[1-9]\d*)(\.\d+)?$/;
+       6 export function toUnits(s: string, decimals: number): bigint {
+       7   const m = /^(-?)(\d+)(?:\.(\d*))?$/.exec(s);
+       8   if (!m) throw new Error(`bad amount: ${s}`);
+      10   if (frac.length > decimals) throw new Error(`too many decimals
+         : ${s}`);
+     … +67 lines (ctrl+o to expand)
+
+⏺ Write(app/src/amount.test.ts)
+  ⎿  Wrote 42 lines to app/src/amount.test.ts
+       1 // Run with: npm test (Node's built-in test runner, no Jest setu
+       2 import { test } from 'node:test';
+       3 import assert from 'node:assert/strict';
+         from './amount.ts';
+       5 
+          {
+       7   assert.equal(toUnits('12.345678901234591676', 18), 12345678901
+       8   assert.equal(fromUnits(12345678901234591676n, 18), '12.3456789
+         01234591676');
+      10   assert.equal(fromUnits(toUnits('12', 6), 6), '12');
+     … +45 lines (ctrl+o to expand)
+
+⏺ Bash(node --test src/amount.test.ts 2>&1 | grep -E "^not ok|^#
+      (pass|fail)|expected|actual" )
+  ⎿      actual: 82058n,
+         expected: 82057n,
+
+⏺ I found a mistake in my own test expectation—$820.57 should actually be
+  $820.58 based on the correct math, and the code was right all along. I'll fix
+  the test and note this as a good example for the "AI output was wrong" section
+  of NOTES.md.
+
+⏺ Bash(sed -i '' "s|assert.equal(usdCents('820.413207', 6, '1.0002'), 82057n);
+      // 820.577289... -> \$820.58? check
+      below|assert.equal(usdCents('820.413207', 6, '1.0002…)
+  ⎿  39:  assert.equal(usdCents('820.413207', 6, '1.0002'), 82058n); // 820
+     .5772896... -> $820.58
+  ⎿  Updated app/package.json (+2 -1)
+      18      "start": "expo start",
+      19      "android": "expo start --android",
+      20      "ios": "expo start --ios",
+      21 -    "web": "expo start --web"                                  
+      21 +    "web": "expo start --web",                                 
+      22 +    "test": "node --test src/amount.test.ts"                   
+      23    },
+      24    "private": true
+      25  }
+  ⎿  Updated app/src/amount.test.ts (+1 -1)
+      36  
+      37  test('USD totals are exact to the cent', () => {
+      38    assert.equal(usdCents('0.01234567', 8, '67312.45'), 83102n); 
+          // 831.0157... -> $831.02
+      39 -  assert.equal(usdCents('820.413207', 6, '1.0002'), 82057n); //
+         - 820.577289... -> $820.58? check below                         
+      39 +  assert.equal(usdCents('820.413207', 6, '1.0002'), 82058n); //
+         + 820.5772896... -> $820.58                                     
+      40    assert.equal(formatUsd(123456789n), '$1,234,567.89');
+      41    assert.equal(formatUsd(5n), '$0.05');
+      42  });
+  ⎿  Updated app/tsconfig.json (+2 -1)
+      1  {
+      2    "extends": "expo/tsconfig.base",
+      3    "compilerOptions": {
+      4 -    "strict": true                                              
+      4 +    "strict": true,                                             
+      5 +    "allowImportingTsExtensions": true                          
+      6    }
+      7  }
+
+⏺ Bash(npm test 2>&1 | tail -8)
+  ⎿  ℹ tests 5
+     ℹ suites 0
+     ℹ pass 5
+     … +5 lines (ctrl+o to expand)
+  ⎿  Loaded CLAUDE.md
+  ⎿  Loaded AGENTS.md
+
+⏺ Bash(git add -A && git commit -qm "Add BigInt amount logic (parse, validate,
+      fee, USD totals) with unit tests…)
+  ⎿  e83f1c7 Add BigInt amount logic (parse, validate, fee, USD totals) wit
+     h unit tests
+     9484456 Initial commit
+⏺ I've weighed three approaches for post-claim balance display—server snapshot
+  only, optimistic subtract, and a reconciled overlay—and picked the overlay
+  approach since it avoids both double-claims and misleading balance jumps while
+  clearly explaining failures. Now writing the API client, with the submit
+  button locked while an asset's claim is unresolved.
+
+⏺ Write(app/src/api.ts)
+  ⎿  Wrote 98 lines to app/src/api.ts
+       1 export const BASE_URL = 'https://task-api.cashmine.io';
+       2 
+       3 const TOKEN_KEY = 'cm.token';
+       5 export const setToken = (t: string | null) =>
+       6   t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeIt
+         em(TOKEN_KEY);
+       7 
+       9   asset: string; decimals: number; available: string; pending: s
+         tring; claiming: string; usdPrice: string;
+      10 };
+     … +109 lines (ctrl+o to expand)
+
+⏺ Write(app/src/claims.ts)
+  ⎿  Wrote 99 lines to app/src/claims.ts
+       1 import { useCallback, useEffect, useState } from 'react';
+          type ClaimBody } from './api';
+       3 import { fromUnits, toUnits } from './amount';
+       5 /**
+       6  * A claim this device submitted. `claim` is missing until the s
+       7  * if the request failed with an unknown outcome, `unknown` is s
+         et and we keep retrying
+         d claim.
+       9  */
+         aim; unknown?: boolean; error?: string };
+     … +109 lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/claims.ts'; s=open(p).read()…)
+  ⎿  ℹ pass 6
+     ℹ fail 0
+  ⎿  Updated app/src/amount.test.ts (+23 -1)
+      1  // Run with: npm test (Node's built-in test runner, no Jest setu
+         p needed)
+      2  import { test } from 'node:test';
+      3  import assert from 'node:assert/strict';
+      4 -import { toUnits, fromUnits, checkAmount, usdCents, formatUsd } 
+        -from './amount.ts';                                             
+      4 +import { toUnits, fromUnits, checkAmount, usdCents, formatUsd, a
+        +pplyClaims } from './amount.ts';                                
+      5  
+      6  test('parse and format round-trip, including 18 decimals', () =>
+          {
+      7    assert.equal(toUnits('12.345678901234591676', 18), 12345678901
+         234591676n);
+     ...
+      40    assert.equal(formatUsd(123456789n), '$1,234,567.89');
+      41    assert.equal(formatUsd(5n), '$0.05');
+      42  });
+      43 +                                                               
+      44 +test('claim overlay: applied until the snapshot catches up, nev
+         +er for failed claims', () => {                                 
+      45 +  const snap = (asOf: string, available: string, claiming: stri
+         +ng) => ({                                                      
+      46 +    asOf,                                                      
+      47 +    items: [{ asset: 'BTC', decimals: 8, available, pending: '0
+         +', claiming, usdPrice: '1' }],                                 
+      48 +  });                                                          
+      49 +  const claim = (status: 'pending' | 'completed' | 'failed') =>
+         + ({                                                            
+      50 +    key: 'k',                                                  
+      51 +    body: { asset: 'BTC', amount: '0.001', destinationId: 'd' }
+         +,                                                              
+      52 +    claim: { id: 'c', asset: 'BTC', amount: '0.001', destinatio
+         +nId: 'd', fee: '0', receiveAmount: '0.001',                    
+      53 +      status, failureReason: null, createdAt: '2026-10-21T14:00
+         +:10Z', updatedAt: '' },                                        
+      54 +  });                                                          
+      55 +  // stale snapshot (before claim): overlay subtracts          
+      56 +  let [b] = applyClaims(snap('2026-10-21T14:00:00Z', '0.01', '0
+         +'), [claim('pending')]);                                       
+      57 +  assert.deepEqual([b.available, b.claiming, b.adjusted], ['0.0
+         +09', '0.001', true]);                                          
+      58 +  // fresh snapshot already includes the claim: no double subtr
+         +act                                                            
+      59 +  [b] = applyClaims(snap('2026-10-21T14:00:15Z', '0.009', '0.00
+         +1'), [claim('pending')]);                                      
+      60 +  assert.deepEqual([b.available, b.claiming, b.adjusted], ['0.0
+         +09', '0.001', false]);                                         
+      61 +  // failed: money is back, no overlay                         
+      62 +  [b] = applyClaims(snap('2026-10-21T14:00:00Z', '0.01', '0'), 
+         +[claim('failed')]);                                            
+      63 +  assert.deepEqual([b.available, b.adjusted], ['0.01', false]);
+      64 +});                                                            
+  ⎿  Updated app/src/amount.ts (+26 -0)
+      1 +import type { Balance, Balances } from './api';                 
+      2 +import type { Tracked } from './claims';                        
+      3 +                                                                
+      4  // Amounts are decimal strings from the API. We convert them to 
+         BigInt "base units"
+      5  // (amount * 10^decimals) so that math is exact even for ETH's 1
+         8 decimals.
+      6  
+     ...
+      60    const [i, f = ''] = s.split('.');
+      61    return '$' + i.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + 
+          f.padEnd(2, '0');
+      62  }
+      63 +                                                               
+      64 +/**                                                            
+      65 + * Balance shown = server snapshot, plus our own claims that th
+         +e snapshot does not include yet                                
+      66 + * (claim.createdAt > asOf). Once a newer snapshot arrives the 
+         +overlay drops away by itself,                                  
+      67 + * so the number never jumps back. Failed claims are never over
+         +laid: their money is available again.                          
+      68 + */                                                            
+      69 +export function applyClaims(b: Balances, tracked: Tracked[]): (
+         +Balance & { adjusted: boolean })[] {                           
+      70 +  return b.items.map((it) => {                                 
+      71 +    let avail = toUnits(it.available, it.decimals);            
+      72 +    let claiming = toUnits(it.claiming, it.decimals);          
+      73 +    let adjusted = false;                                      
+      74 +    for (const t of tracked) {                                 
+      75 +      const c = t.claim;                                       
+      76 +      if (!c || c.asset !== it.asset || c.status === 'failed' |
+         +| c.createdAt <= b.asOf) continue;                             
+      77 +      const amt = toUnits(c.amount, it.decimals);              
+      78 +      avail -= amt;                                            
+      79 +      if (c.status === 'pending') claiming += amt;             
+      80 +      adjusted = true;                                         
+      81 +    }                                                          
+      82 +    if (avail < 0n) avail = 0n;                                
+      83 +    return { ...it, available: fromUnits(avail, it.decimals), c
+         +laiming: fromUnits(claiming, it.decimals), adjusted };         
+      84 +  });                                                          
+      85 +}                                                              
+  ⎿  Updated app/src/claims.ts (+6 -25)
+      1  import { useCallback, useEffect, useState } from 'react';
+      2 -import { api, ApiError, type Balance, type Balances, type Claim,
+        - type ClaimBody } from './api';                                 
+      3 -import { fromUnits, toUnits } from './amount';                  
+      2 +import { api, ApiError, type Claim, type ClaimBody } from './api
+        +';                                                              
+      3  
+      4  /**
+      5   * A claim this device submitted. `claim` is missing until the s
+         erver has answered;
+     ...
+       8   */
+       9  export type Tracked = { key: string; body: ClaimBody; claim?: C
+          laim; unknown?: boolean; error?: string };
+      10  
+      12 -/**                                                            
+      13 - * Balance shown = server snapshot, plus our own claims that th
+         -e snapshot does not include yet                                
+      14 - * (claim.createdAt > asOf). Once a newer snapshot arrives the 
+         -overlay drops away by itself,                                  
+      15 - * so the number never jumps back. Failed claims are never over
+         -laid: their money is available again.                          
+      16 - */                                                            
+      17 -export function applyClaims(b: Balances, tracked: Tracked[]): (
+         -Balance & { adjusted: boolean })[] {                           
+      18 -  return b.items.map((it) => {                                 
+      19 -    let avail = toUnits(it.available, it.decimals);            
+      20 -    let claiming = toUnits(it.claiming, it.decimals);          
+      21 -    let adjusted = false;                                      
+      22 -    for (const t of tracked) {                                 
+      23 -      const c = t.claim;                                       
+      24 -      if (!c || c.asset !== it.asset || c.status === 'failed' |
+         -| c.createdAt <= b.asOf) continue;                             
+      25 -      const amt = toUnits(c.amount, it.decimals);              
+      26 -      avail -= amt;                                            
+      27 -      if (c.status === 'pending') claiming += amt;             
+      28 -      adjusted = true;                                         
+      29 -    }                                                          
+      30 -    if (avail < 0n) avail = 0n;                                
+      31 -    return { ...it, available: fromUnits(avail, it.decimals), c
+         -laiming: fromUnits(claiming, it.decimals), adjusted };         
+      32 -  });                                                          
+      33 -}                                                              
+      34 -                                                               
+      11  const KEY = 'cm.claims';
+      12 +const inflight = new Set<string>(); // claim keys with a POST i
+         +n flight                                                       
+      13  const load = (): Tracked[] => JSON.parse(localStorage.getItem(K
+          EY) ?? '[]');
+      14  
+      15  export function useClaims() {
+     ...
+      25  
+      26    const send = useCallback(
+     … 14 more lines (ctrl+o to expand)
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/claims.ts'; s=open(p).read()…)
+  ⎿  14:05
+  ⎿  Updated app/src/claims.ts (+4 -1)
+      13  const load = (): Tracked[] => JSON.parse(localStorage.getItem(K
+          EY) ?? '[]');
+      14  
+      15  export function useClaims() {
+      16 -  const [list, setList] = useState<Tracked[]>(load);           
+      16 +  // A claim still "sending" when the page closed has an unknow
+         +n outcome: resume it.                                          
+      17 +  const [list, setList] = useState<Tracked[]>(() =>            
+      18 +    load().map((t) => (!t.claim && !t.error ? { ...t, unknown: 
+         +true } : t)),                                                  
+      19 +  );                                                           
+      20  
+      21    const update = useCallback((key: string, patch: Partial<Track
+          ed>) => {
+      22      setList((l) => {
+
+⏺ Bash(python3 - <<'EOF'
+      p='src/claims.ts'; s=open(p).read()…)
+  ⎿  src/claims.ts:11:const KEY = 'cm.claims';
+     src/api.ts:8:  localStorage.removeItem('cm.claims');
+  ⎿  Updated app/src/api.ts (+4 -1)
+       2  
+       3  const TOKEN_KEY = 'cm.token';
+       4  export const getToken = () => localStorage.getItem(TOKEN_KEY);
+       5 -export const setToken = (t: string | null) =>                  
+       5 +/** Claims tracked on this device belong to the old token, so t
+         +hey are dropped too. */                                        
+       6 +export const setToken = (t: string | null) => {                
+       7    t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeI
+          tem(TOKEN_KEY);
+       8 +  localStorage.removeItem('cm.claims');                        
+       9 +};                                                             
+      10  
+      11  export type Balance = {
+      12    asset: string; decimals: number; available: string; pending: 
+          string; claiming: string; usdPrice: string;
+  ⎿  Updated app/src/claims.ts (+5 -3)
+      14  
+      15  export function useClaims() {
+      16    // A claim still "sending" when the page closed has an unknow
+          n outcome: resume it.
+      17 -  const [list, setList] = useState<Tracked[]>(() =>            
+      18 -    load().map((t) => (!t.claim && !t.error ? { ...t, unknown: 
+         -true } : t)),                                                  
+      19 -  );                                                           
+      17 +  const [list, setList] = useState<Tracked[]>(() => {          
+      18 +    const l = load().map((t) => (!t.claim && !t.error ? { ...t,
+         + unknown: true } : t));                                        
+      19 +    localStorage.setItem(KEY, JSON.stringify(l));              
+      20 +    return l;                                                  
+      21 +  });                                                          
+      22  
+      23    const update = useCallback((key: string, patch: Partial<Track
+          ed>) => {
+      24      setList((l) => {
+
+⏺ Now the UI. One App.tsx with simple state-based screens. I'm skipping Expo
+  Router because three screens don't need a routing library.
+
+⏺ Write(app/App.tsx)
+  ⎿  Added 345 lines, removed 11 lines
+        1 +import { useCallback, useEffect, useState } from 'react';     
+        2 +import { ActivityIndicator, FlatList, Pressable, ScrollView, S
+          +tyleSheet, Text, TextInput, View } from 'react-native';       
+        3  import { StatusBar } from 'expo-status-bar';
+        2 -import { StyleSheet, Text, View } from 'react-native';        
+        4 +import { api, ApiError, getToken, setToken, type Activity, typ
+          +e Balances, type ClaimOptions } from './src/api';             
+        5 +import { applyClaims, checkAmount, formatUsd, fromUnits, toUni
+          +ts, usdCents } from './src/amount';                           
+        6 +import { useClaims, type Tracked } from './src/claims';       
+        7  
+        8 +type Screen = { name: 'home' } | { name: 'claim'; asset: strin
+          +g } | { name: 'status'; key: string } | { name: 'activity' }; 
+        9 +type Shown = ReturnType<typeof applyClaims>[number];          
+       10 +                                                              
+       11 +const errText = (e: unknown) =>                               
+       12 +  e instanceof ApiError && e.status === 401 ? 'Your token is i
+          +nvalid or expired. Change it below.' : e instanceof Error ? e.
+          +message : String(e);                                          
+       13 +const unresolved = (t: Tracked) => !t.error && (!t.claim || t.
+          +claim.status === 'pending');                                  
+       14 +                                                              
+       15  export default function App() {
+       16 +  const [hasToken, setHasToken] = useState(!!getToken());     
+       17 +  if (!hasToken) return <TokenGate onDone={() => setHasToken(t
+          +rue)} />;                                                     
+       18 +  return <Main />;                                            
+       19 +}                                                             
+       20 +                                                              
+       21 +function TokenGate({ onDone }: { onDone: () => void }) {      
+       22 +  const [t, setT] = useState('');                             
+       23    return (
+        6 -    <View style={styles.container}>                           
+        7 -      <Text>Open up App.tsx to start working on your app!</Tex
+          -t>                                                            
+        8 -      <StatusBar style="auto" />                              
+       24 +    <Page>                                                    
+       25 +      <Text style={s.h1}>CashMine</Text>                      
+       26 +      <Text style={s.muted}>Paste your API token to continue. 
+          +It is stored only in this browser.</Text>                     
+       27 +      <TextInput style={s.input} value={t} onChangeText={setT}
+          + placeholder="ct1...." autoCapitalize="none" autoCorrect={fals
+          +e} />                                                         
+       28 +      <Btn title="Continue" disabled={!t.trim()} onPress={() =
+          +> (setToken(t.trim()), onDone())} />                          
+       29 +    </Page>                                                   
+       30 +  );                                                          
+       31 +}                                                             
+       32 +                                                              
+       33 +function Main() {                                             
+       34 +  const [screen, setScreen] = useState<Screen>({ name: 'home' 
+          +});                                                           
+       35 +  const claims = useClaims();                                 
+       36 +  const [bal, setBal] = useState<Balances | null>(null);      
+       37 +  const [error, setError] = useState<unknown>(null);          
+       38 +  const [loading, setLoading] = useState(false);              
+       39 +                                                              
+       40 +  const load = useCallback(async () => {                      
+       41 +    setLoading(true);                                         
+       42 +    try {                                                     
+       43 +      const b = await api.balances();                         
+       44 +      // Ignore a response older than what we already show (re
+          +sponses can arrive out of order).                             
+       45 +      setBal((cur) => (cur && cur.asOf > b.asOf ? cur : b));  
+       46 +      setError(null);                                         
+       47 +    } catch (e) {                                             
+       48 +      setError(e);                                            
+       49 +    } finally {                                               
+       50 +      setLoading(false);                                      
+       51 +    }                                                         
+       52 +  }, []);                                                     
+       53 +                                                              
+       54 +  useEffect(() => {                                           
+       55 +    load();                                                   
+       56 +    const id = setInterval(load, 15000); // snapshots are reco
+          +mputed every 15 s                                             
+       57 +    return () => clearInterval(id);                           
+       58 +  }, [load]);                                                 
+       59 +                                                              
+       60 +  // When a claim settles, the server snapshot changes: refres
+          +h right away.                                                 
+       61 +  const settled = claims.list.filter((t) => t.claim && t.claim
+          +.status !== 'pending').length;                                
+       62 +  useEffect(() => {                                           
+       63 +    if (settled) load();                                      
+       64 +  }, [settled, load]);                                        
+       65 +                                                              
+       66 +  const items = bal ? applyClaims(bal, claims.list) : null;   
+       67 +  const go = setScreen;                                       
+       68 +                                                              
+       69 +  if (screen.name === 'claim' && items)                       
+       70 +    return <ClaimScreen items={items} asset={screen.asset} bus
+          +y={claims.list} onBack={() => go({ name: 'home' })}           
+       71 +      onSubmit={(body) => go({ name: 'status', key: claims.sub
+          +mit(body) })} />;                                             
+       72 +  if (screen.name === 'status') {                             
+       73 +    const t = claims.list.find((x) => x.key === screen.key);  
+       74 +    return <Page><Back onPress={() => go({ name: 'home' })} />
+          +{t ? <ClaimStatus t={t} onRetry={() => claims.send(t)} /> : nu
+          +ll}</Page>;                                                   
+       75 +  }                                                           
+       76 +  if (screen.name === 'activity') return <ActivityScreen onBac
+          +k={() => go({ name: 'home' })} />;                            
+       77 +                                                              
+       78 +  return (                                                    
+       79 +    <Page>                                                    
+       80 +      <View style={s.row}>                                    
+       81 +        <Text style={s.h1}>Payback</Text>                     
+       82 +        <Pressable onPress={() => (setToken(null), location.re
+          +load())}><Text style={s.link}>Change token</Text></Pressable> 
+       83 +      </View>                                                 
+       84 +                                                              
+       85 +      {claims.list.filter((t) => t.claim?.status !== 'complete
+          +d' || true).slice(0, 3).map((t) =>                            
+       86 +        <ClaimBanner key={t.key} t={t} onOpen={() => go({ name
+          +: 'status', key: t.key })} onDismiss={() => claims.dismiss(t.k
+          +ey)} />)}                                                     
+       87 +                                                              
+       88 +      {!bal && loading && <ActivityIndicator style={{ marginTo
+          +p: 40 }} />}                                                  
+       89 +      {error != null && (                                     
+       90 +        <View style={s.errorBox}>                             
+       91 +          <Text style={s.errorText}>{bal ? 'Could not refresh:
+          + ' : 'Could not load balances: '}{errText(error)}</Text>      
+       92 +          <Btn title="Retry" onPress={load} small />          
+       93 +        </View>                                               
+       94 +      )}                                                      
+       95 +                                                              
+       96 +      {bal && items && (                                      
+       97 +        <>                                                    
+       98 +          <View style={s.card}>                               
+       99 +            <Text style={s.muted}>Total (available + pending)<
+          +/Text>                                                        
+      100 +            <Text style={s.total}>                            
+      101 +              {formatUsd(items.reduce((sum, it) =>            
+      102 +                sum + usdCents(it.available, it.decimals, it.u
+          +sdPrice) + usdCents(it.pending, it.decimals, it.usdPrice), 0n)
+          +)}                                                            
+      103 +            </Text>                                           
+      104 +            <View style={s.row}>                              
+      105 +              <Freshness asOf={bal.asOf} />                   
+      106 +              <Pressable onPress={load} disabled={loading}><Te
+          +xt style={s.link}>{loading ? 'Refreshing…' : 'Refresh'}</Text>
+          +</Pressable>                                                  
+      107 +            </View>                                           
+      108 +          </View>                                             
+      109 +          {items.map((it) => (                                
+      110 +            <AssetRow key={it.asset} it={it} busy={claims.list
+          +.some((t) => t.body.asset === it.asset && unresolved(t))}     
+      111 +              onClaim={() => go({ name: 'claim', asset: it.ass
+          +et })} />                                                     
+      112 +          ))}                                                 
+      113 +          <Btn title="Activity" onPress={() => go({ name: 'act
+          +ivity' })} secondary />                                       
+      114 +        </>                                                   
+      115 +      )}                                                      
+      116 +    </Page>                                                   
+      117 +  );                                                          
+      118 +}                                                             
+      119 +                                                              
+      120 +function Freshness({ asOf }: { asOf: string }) {              
+      121 +  const [now, setNow] = useState(Date.now());                 
+      122 +  useEffect(() => {                                           
+      123 +    const id = setInterval(() => setNow(Date.now()), 1000);   
+      124 +    return () => clearInterval(id);                           
+      125 +  }, []);                                                     
+      126 +  const sec = Math.max(0, Math.round((now - Date.parse(asOf)) 
+          +/ 1000));                                                     
+      127 +  const label = sec < 60 ? `${sec}s ago` : `${Math.round(sec /
+          + 60)} min ago`;                                               
+      128 +  return <Text style={[s.muted, sec > 60 && s.warn]}>Updated {
+          +label}{sec > 60 ? ' (may be outdated)' : ''}</Text>;          
+      129 +}                                                             
+      130 +                                                              
+      131 +function AssetRow({ it, busy, onClaim }: { it: Shown; busy: bo
+          +olean; onClaim: () => void }) {                               
+      132 +  const canClaim = toUnits(it.available, it.decimals) > 0n && 
+          +!busy;                                                        
+      133 +  return (                                                    
+      134 +    <View style={s.card}>                                     
+      135 +      <View style={s.row}>                                    
+      136 +        <Text style={s.h2}>{it.asset}</Text>                  
+      137 +        <Text style={s.muted}>{formatUsd(usdCents(it.available
+          +, it.decimals, it.usdPrice))}</Text>                          
+      138 +      </View>                                                 
+      139 +      <Line label="Available" value={`${it.available} ${it.ass
+          +et}`} strong />                                               
+      140 +      <Line label="Pending" value={`${it.pending} ${it.asset}`
+          +} />                                                          
+      141 +      {it.claiming !== '0' && <Line label={it.adjusted ? 'Clai
+          +ming (incl. your new claim)' : 'Claiming'} value={`${it.claimi
+          +ng} ${it.asset}`} />}                                         
+      142 +      <Btn title={busy ? 'Claim in progress…' : 'Claim'} disab
+          +led={!canClaim} onPress={onClaim} small />                    
+      143      </View>
+      144    );
+      145  }
+      146  
+       13 -const styles = StyleSheet.create({                            
+       14 -  container: {                                                
+       15 -    flex: 1,                                                  
+       16 -    backgroundColor: '#fff',                                  
+       17 -    alignItems: 'center',                                     
+       18 -    justifyContent: 'center',                                 
+       19 -  },                                                          
+      147 +function ClaimScreen({ items, asset: initial, busy, onBack, on
+          +Submit }: {                                                   
+      148 +  items: Shown[]; asset: string; busy: Tracked[]; onBack: () =
+          +> void;                                                       
+      149 +  onSubmit: (b: { asset: string; amount: string; destinationId
+          +: string }) => void;                                          
+      150 +}) {                                                          
+      151 +  const [asset, setAsset] = useState(initial);                
+      152 +  const [opts, setOpts] = useState<ClaimOptions | null>(null);
+      153 +  const [error, setError] = useState<unknown>(null);          
+      154 +  const [amount, setAmount] = useState('');                   
+      155 +  const [dest, setDest] = useState<string | null>(null);      
+      156 +  const [review, setReview] = useState(false);                
+      157 +  const it = items.find((x) => x.asset === asset)!;           
+      158 +  const isBusy = busy.some((t) => t.body.asset === asset && un
+          +resolved(t));                                                 
+      159 +                                                              
+      160 +  const loadOpts = useCallback(() => {                        
+      161 +    setOpts(null); setError(null);                            
+      162 +    api.claimOptions(asset).then((o) => { setOpts(o); setDest(
+          +o.destinations[0]?.id ?? null); }, setError);                 
+      163 +  }, [asset]);                                                
+      164 +  useEffect(loadOpts, [loadOpts]);                            
+      165 +                                                              
+      166 +  const check = opts ? checkAmount(amount, { decimals: it.deci
+          +mals, available: it.available, minAmount: opts.minAmount, fee:
+          + opts.fee }) : null;                                          
+      167 +                                                              
+      168 +  return (                                                    
+      169 +    <Page>                                                    
+      170 +      <Back onPress={review ? () => setReview(false) : onBack}
+          + />                                                           
+      171 +      <Text style={s.h1}>Claim</Text>                         
+      172 +      <View style={s.chips}>                                  
+      173 +        {items.map((x) => (                                   
+      174 +          <Pressable key={x.asset} disabled={review} onPress={
+          +() => (setAsset(x.asset), setAmount(''))}                     
+      175 +            style={[s.chip, x.asset === asset && s.chipOn]}>  
+      176 +            <Text style={x.asset === asset ? s.chipOnText : un
+          +defined}>{x.asset}</Text>                                     
+      177 +          </Pressable>                                        
+      178 +        ))}                                                   
+      179 +      </View>                                                 
+      180 +      <Text style={s.muted}>Available: {it.available} {it.asse
+          +t}</Text>                                                     
+      181 +                                                              
+      182 +      {!opts && !error && <ActivityIndicator style={{ marginTo
+          +p: 20 }} />}                                                  
+      183 +      {error != null && <View style={s.errorBox}><Text style={
+          +s.errorText}>{errText(error)}</Text><Btn title="Retry" onPress
+          +={loadOpts} small /></View>}                                  
+      184 +                                                              
+      185 +      {opts && !review && (                                   
+      186 +        <>                                                    
+      187 +          <View style={s.row}>                                
+      188 +            <TextInput style={[s.input, { flex: 1 }]} value={a
+          +mount} onChangeText={setAmount} inputMode="decimal"           
+      189 +              placeholder={`Min ${opts.minAmount}`} autoCorrec
+          +t={false} />                                                  
+      190 +            <Btn title="Max" small secondary onPress={() => se
+          +tAmount(it.available)} />                                     
+      191 +          </View>                                             
+      192 +          {amount !== '' && check && !check.ok && <Text style=
+          +{s.errorText}>{check.error}</Text>}                           
+      193 +          <Text style={s.label}>Send to</Text>                
+      194 +          {opts.destinations.map((d) => (                     
+      195 +            <Pressable key={d.id} onPress={() => setDest(d.id)
+          +} style={[s.chip, dest === d.id && s.chipOn, { marginBottom: 6
+          + }]}>                                                         
+      196 +              <Text style={dest === d.id ? s.chipOnText : unde
+          +fined}>{d.label}</Text>                                       
+      197 +            </Pressable>                                      
+      198 +          ))}                                                 
+      199 +          <Line label="Fee" value={`${opts.fee} ${asset}`} /> 
+      200 +          <Line label="You receive" value={check?.ok ? `${from
+          +Units(check.receive, it.decimals)} ${asset}` : '—'} strong /> 
+      201 +          {isBusy && <Text style={s.warn}>A claim for {asset} 
+          +is still in progress. Wait for it to finish.</Text>}          
+      202 +          <Btn title="Review" disabled={!check?.ok || !dest ||
+          + isBusy} onPress={() => setReview(true)} />                   
+      203 +        </>                                                   
+      204 +      )}                                                      
+      205 +                                                              
+      206 +      {opts && review && check?.ok && dest && (               
+      207 +        <View style={s.card}>                                 
+      208 +          <Text style={s.h2}>Confirm claim</Text>             
+      209 +          <Line label="Amount" value={`${check.amount} ${asset
+          +}`} />                                                        
+      210 +          <Line label="Fee" value={`−${opts.fee} ${asset}`} />
+      211 +          <Line label="You receive" value={`${fromUnits(check.
+          +receive, it.decimals)} ${asset}`} strong />                   
+      212 +          <Line label="To" value={opts.destinations.find((d) =
+          +> d.id === dest)!.label} />                                   
+      213 +          <Btn title="Confirm and claim" onPress={() => onSubm
+          +it({ asset, amount: check.amount, destinationId: dest })} />  
+      214 +        </View>                                               
+      215 +      )}                                                      
+      216 +    </Page>                                                   
+      217 +  );                                                          
+      218 +}                                                             
+      219 +                                                              
+      220 +function claimState(t: Tracked): { title: string; detail: stri
+          +ng; tone: 'info' | 'ok' | 'bad' } {                           
+      221 +  const what = `${t.body.amount} ${t.body.asset}`;            
+      222 +  if (t.error) return { title: 'Claim not submitted', detail: 
+          +`${what}: ${t.error}. Nothing was claimed.`, tone: 'bad' };   
+      223 +  if (!t.claim && t.unknown)                                  
+      224 +    return { title: 'Checking your claim…', detail: `We lost t
+          +he connection while sending ${what}. We keep checking safely —
+          + it can never be claimed twice.`, tone: 'info' };             
+      225 +  if (!t.claim) return { title: 'Sending claim…', detail: what
+          +, tone: 'info' };                                             
+      226 +  const c = t.claim;                                          
+      227 +  if (c.status === 'pending') return { title: 'Claim in progre
+          +ss', detail: `${what}, you receive ${c.receiveAmount}. Usually
+          + takes under 20 s.`, tone: 'info' };                          
+      228 +  if (c.status === 'completed') return { title: 'Claim complet
+          +ed', detail: `${c.receiveAmount} ${c.asset} sent.`, tone: 'ok'
+          + };                                                           
+      229 +  return { title: 'Claim failed', detail: `${c.failureReason ?
+          +? 'Unknown reason'}. ${what} is back in your available balance
+          +.`, tone: 'bad' };                                            
+      230 +}                                                             
+      231 +                                                              
+      232 +function ClaimBanner({ t, onOpen, onDismiss }: { t: Tracked; o
+          +nOpen: () => void; onDismiss: () => void }) {                 
+      233 +  const st = claimState(t);                                   
+      234 +  return (                                                    
+      235 +    <Pressable onPress={onOpen} style={[s.banner, s[st.tone]]}
+          +>                                                             
+      236 +      <View style={{ flex: 1 }}>                              
+      237 +        <Text style={s.bold}>{st.title}</Text>                
+      238 +        <Text>{st.detail}</Text>                              
+      239 +      </View>                                                 
+      240 +      {!unresolved(t) && <Pressable onPress={onDismiss}><Text 
+          +style={s.link}>✕</Text></Pressable>}                          
+      241 +    </Pressable>                                              
+      242 +  );                                                          
+      243 +}                                                             
+      244 +                                                              
+      245 +function ClaimStatus({ t, onRetry }: { t: Tracked; onRetry: ()
+          + => void }) {                                                 
+      246 +  const st = claimState(t);                                   
+      247 +  return (                                                    
+      248 +    <View style={[s.card, s[st.tone]]}>                       
+      249 +      {unresolved(t) && <ActivityIndicator />}                
+      250 +      <Text style={s.h2}>{st.title}</Text>                    
+      251 +      <Text>{st.detail}</Text>                                
+      252 +      {t.claim && <Text style={s.muted}>Claim id {t.claim.id}<
+          +/Text>}                                                       
+      253 +      {t.unknown && !t.claim && <Btn title="Check now" small o
+          +nPress={onRetry} />}                                          
+      254 +    </View>                                                   
+      255 +  );                                                          
+      256 +}                                                             
+      257 +                                                              
+      258 +function ActivityScreen({ onBack }: { onBack: () => void }) { 
+      259 +  const [items, setItems] = useState<Activity[]>([]);         
+      260 +  const [cursor, setCursor] = useState<string | null | undefin
+          +ed>(undefined); // undefined = first page, null = end         
+      261 +  const [loading, setLoading] = useState(false);              
+      262 +  const [error, setError] = useState<unknown>(null);          
+      263 +                                                              
+      264 +  const more = useCallback(async () => {                      
+      265 +    if (loading || cursor === null) return;                   
+      266 +    setLoading(true); setError(null);                         
+      267 +    try {                                                     
+      268 +      const page = await api.activity(cursor);                
+      269 +      setItems((l) => [...l, ...page.items]);                 
+      270 +      setCursor(page.nextCursor);                             
+      271 +    } catch (e) {                                             
+      272 +      setError(e);                                            
+      273 +    } finally {                                               
+      274 +      setLoading(false);                                      
+      275 +    }                                                         
+      276 +  }, [cursor, loading]);                                      
+      277 +  useEffect(() => { more(); }, []); // eslint-disable-line rea
+          +ct-hooks/exhaustive-deps                                      
+      278 +                                                              
+      279 +  return (                                                    
+      280 +    <View style={s.page}>                                     
+      281 +      <Back onPress={onBack} />                               
+      282 +      <Text style={s.h1}>Activity</Text>                      
+      283 +      <FlatList                                               
+      284 +        data={items}                                          
+      285 +        keyExtractor={(a) => a.id}                            
+      286 +        onEndReached={more}                                   
+      287 +        onEndReachedThreshold={0.5}                           
+      288 +        renderItem={({ item: a }) => (                        
+      289 +          <View style={[s.row, s.activity]}>                  
+      290 +            <View>                                            
+      291 +              <Text style={s.bold}>{a.type[0].toUpperCase() + 
+          +a.type.slice(1)}{a.exchange ? ` · ${a.exchange}` : ''}</Text> 
+      292 +              <Text style={s.muted}>{new Date(a.createdAt).toL
+          +ocaleString()} · {a.status}</Text>                            
+      293 +            </View>                                           
+      294 +            <Text style={[s.bold, a.amount.startsWith('-') && 
+          +{ color: '#b42318' }]}>{a.amount} {a.asset}</Text>            
+      295 +          </View>                                             
+      296 +        )}                                                    
+      297 +        ListFooterComponent={                                 
+      298 +          error != null ? <View style={s.errorBox}><Text style
+          +={s.errorText}>{errText(error)}</Text><Btn title="Retry" small
+          + onPress={more} /></View>                                     
+      299 +          : loading ? <ActivityIndicator style={{ margin: 16 }
+          +} />                                                          
+      300 +          : cursor === null ? <Text style={[s.muted, { textAli
+          +gn: 'center', margin: 16 }]}>{items.length ? 'End of history' 
+          +: 'No activity yet'}</Text>                                   
+      301 +          : <Btn title="Load more" small secondary onPress={mo
+          +re} />                                                        
+      302 +        }                                                     
+      303 +      />                                                      
+      304 +    </View>                                                   
+      305 +  );                                                          
+      306 +}                                                             
+      307 +                                                              
+      308 +// --- small UI helpers ---                                   
+      309 +function Page({ children }: { children: React.ReactNode }) {  
+      310 +  return <ScrollView contentContainerStyle={s.page}><StatusBar
+          + style="auto" />{children}</ScrollView>;                      
+      311 +}                                                             
+      312 +const Back = ({ onPress }: { onPress: () => void }) => <Pressa
+          +ble onPress={onPress}><Text style={s.link}>‹ Back</Text></Pres
+          +sable>;                                                       
+      313 +const Line = ({ label, value, strong }: { label: string; value
+          +: string; strong?: boolean }) => (                            
+      314 +  <View style={s.row}><Text style={s.muted}>{label}</Text><Tex
+          +t style={[strong && s.bold, s.value]} selectable>{value}</Text
+          +></View>                                                      
+      315 +);                                                            
+      316 +function Btn({ title, onPress, disabled, small, secondary }: {
+          + title: string; onPress: () => void; disabled?: boolean; small
+          +?: boolean; secondary?: boolean }) {                          
+      317 +  return (                                                    
+      318 +    <Pressable accessibilityRole="button" onPress={onPress} di
+          +sabled={disabled}                                             
+      319 +      style={[s.btn, small && s.btnSmall, secondary && s.btnSe
+          +condary, disabled && { opacity: 0.4 }]}>                      
+      320 +      <Text style={[s.btnText, secondary && { color: '#1d4ed8'
+          + }]}>{title}</Text>                                           
+      321 +    </Pressable>                                              
+      322 +  );                                                          
+      323 +}                                                             
+      324 +                                                              
+      325 +const s = StyleSheet.create({                                 
+      326 +  page: { padding: 16, gap: 12, width: '100%', maxWidth: 480, 
+          +alignSelf: 'center', flexGrow: 1 },                           
+      327 +  h1: { fontSize: 26, fontWeight: '700' },                    
+      328 +  h2: { fontSize: 18, fontWeight: '700' },                    
+      329 +  total: { fontSize: 32, fontWeight: '700' },                 
+      330 +  muted: { color: '#667085' },                                
+      331 +  warn: { color: '#b54708' },                                 
+      332 +  bold: { fontWeight: '600' },                                
+      333 +  value: { flexShrink: 1, textAlign: 'right', marginLeft: 12 }
+          +,                                                             
+      334 +  label: { fontWeight: '600', marginTop: 4 },                 
+      335 +  link: { color: '#1d4ed8', fontWeight: '600', padding: 4 },  
+      336 +  row: { flexDirection: 'row', justifyContent: 'space-between'
+          +, alignItems: 'center', gap: 8 },                             
+      337 +  card: { backgroundColor: '#fff', borderRadius: 12, padding: 
+          +14, gap: 8, borderWidth: 1, borderColor: '#eaecf0' },         
+      338 +  input: { borderWidth: 1, borderColor: '#d0d5dd', borderRadiu
+          +s: 8, padding: 12, fontSize: 16, backgroundColor: '#fff' },   
+      339 +  btn: { backgroundColor: '#1d4ed8', borderRadius: 10, padding
+          +: 14, alignItems: 'center' },                                 
+      340 +  btnSmall: { padding: 10 },                                  
+      341 +  btnSecondary: { backgroundColor: '#eff4ff' },               
+      342 +  btnText: { color: '#fff', fontWeight: '600' },              
+      343 +  chips: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },  
+      344 +  chip: { borderWidth: 1, borderColor: '#d0d5dd', borderRadius
+          +: 20, paddingHorizontal: 14, paddingVertical: 8 },            
+      345 +  chipOn: { backgroundColor: '#1d4ed8', borderColor: '#1d4ed8'
+          + },                                                           
+      346 +  chipOnText: { color: '#fff', fontWeight: '600' },           
+      347 +  errorBox: { backgroundColor: '#fef3f2', borderRadius: 10, pa
+          +dding: 12, gap: 8 },                                          
+      348 +  errorText: { color: '#b42318' },                            
+      349 +  banner: { flexDirection: 'row', borderRadius: 10, padding: 1
+          +2, gap: 8 },                                                  
+      350 +  info: { backgroundColor: '#eff8ff' },                       
+      351 +  ok: { backgroundColor: '#ecfdf3' },                         
+      352 +  bad: { backgroundColor: '#fef3f2' },                        
+      353 +  activity: { paddingVertical: 10, borderBottomWidth: 1, borde
+          +rColor: '#eaecf0' },                                          
+      354  });
+
+⏺ Bash(npx tsc --noEmit 2>&1 | head -20)
+  ⎿  src/amount.test.ts(2,22): error TS2591: Cannot find name 'node:test'.
+     Do you need to install type definitions for node? Try `npm i --save-de
+     v @types/node` and then add 'node' to the types field in your tsconfig
+     … +13 lines (ctrl+o to expand)
+
+⏺ Bash(npm i -D @types/node >/dev/null 2>&1; sed -i ''
+      "s/{claims.list.filter((t) => t.claim?.status !== 'completed' ||
+      true).slice(0, 3).map((t) =>/{claims.list.slice…)
+  ⎿  src/amount.test.ts(2,22): error TS2591: Cannot find name 'node:test'.
+     Do you need to install type definitions for node? Try `npm i --save-de
+     v @types/node` and then add 'node' to the types field in your tsconfig
+     … +15 lines (ctrl+o to expand)
+  ⎿  Updated app/App.tsx (+1 -1)
+      82          <Pressable onPress={() => (setToken(null), location.rel
+          oad())}><Text style={s.link}>Change token</Text></Pressable>
+      83        </View>
+      84  
+      85 -      {claims.list.filter((t) => t.claim?.status !== 'completed
+         -' || true).slice(0, 3).map((t) =>                              
+      85 +      {claims.list.slice(0, 3).map((t) =>                      
+      86          <ClaimBanner key={t.key} t={t} onOpen={() => go({ name:
+           'status', key: t.key })} onDismiss={() => claims.dismiss(t.key
+          )} />)}
+      87  
+      88        {!bal && loading && <ActivityIndicator style={{ marginTop
+          : 40 }} />}
+  ⎿  Updated app/package-lock.json (+1 -0)
+      16          "react-native-web": "^0.21.4"
+      17        },
+      18        "devDependencies": {
+      19 +        "@types/node": "^26.6.5",                              
+      20          "@types/react": "~19.3.0",
+      21          "typescript": "~6.0.3"
+      22        }
+  ⎿  Updated app/package.json (+1 -0)
+      11      "react-native-web": "^0.21.4"
+      12    },
+      13    "devDependencies": {
+      14 +    "@types/node": "^26.6.5",                                  
+      15      "@types/react": "~19.3.0",
+      16      "typescript": "~6.0.3"
+      17    },
+
+⏺ Bash(node -e "const
+      j=require('./tsconfig.json');j.compilerOptions.types=['node'];require('fs'
+      ).writeFileSync('tsconfig.json',JSON.stringify(j,null,2)+'\n')"; npx ts…)
+  ⎿  85:      {claims.list.slice(0, 3).map((t) =>
+  ⎿  Updated app/tsconfig.json (+4 -1)
+       2    "extends": "expo/tsconfig.base",
+       3    "compilerOptions": {
+       4      "strict": true,
+       5 -    "allowImportingTsExtensions": true                         
+       5 +    "allowImportingTsExtensions": true,                        
+       6 +    "types": [                                                 
+       7 +      "node"                                                   
+       8 +    ]                                                          
+       9    }
+      10  }
+
+⏺ Typecheck and tests pass. Next I'm building for web to make sure it bundles.
+
+⏺ Bash(git add -A && git commit -qm "Home balances, claim flow with
+      review/status, activity list…)
+  ⎿  › Files (3):
+     favicon.ico (15KB)
+     index.html (1.2KB)
+     … +8 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Bash(grep -n dist .gitignore; ls "/Applications/Google Chrome.app" >/dev/null
+      2>&1 && echo chrome; mkdir -p /tmp/pw && cd /tmp/pw && npm i
+      playwright-core >/dev/null…)
+  ⎿  8:dist/
+     chrome
+     ok
+  ⎿  Shell cwd was reset to ~/Project/cashmineTest
+
+⏺ Bash(cd ~/Project/cashmineTest/app && (npx -y serve dist -l
+      8099 >/tmp/serve.log 2>&1 &) ; sleep 4
+      cat > /tmp/pw/run.mjs <<'EOF'…)
+  ⎿      triggerUncaughtException(
+         ^
+     … +16 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to ~/Project/cashmineTest
+  ⎿  (timeout 3m)
+
+⏺ Bash(cd /tmp/pw && sed -i '' "s/getByText('Continue')/getByRole('button', {
+      name: 'Continue' })/; s/getByText('Max')/getByRole('button', { name: 'Max'
+      })/g; s/getByT…)
+  ⎿  console error: Failed to load resource: the server responded with a st
+     atus of 504 ()
+     console error: Failed to load resource: the server responded with a st
+     … +9 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to ~/Project/cashmineTest
+  ⎿  (timeout 3m)
+
+⏺ The API is injecting 504/503 errors ("chaos"), which is a good test of the
+  retry logic. Checking the screenshots:
+
+  Read 7 files (ctrl+o to expand)
+
+⏺ Headless Chrome testing at 390px confirms the full flow works, including
+  idempotent retries and pagination, but I found a correctness gap: if a claim's
+  outcome is unknown and a later retry returns a definitive error like 401, the
+  UI could wrongly say "Nothing was claimed." I'll fix that now.
+
+⏺ Bash(cd ~/Project/cashmineTest/app && python3 - <<'EOF'
+      p='src/claims.ts'; s=open(p).read()…)
+  ⎿  done
+     14:08
+
+⏺ Time is 14:08 UTC. The app works and has 5 commits. Before deploying and
+  pushing I need you to decide one thing:
+
+⏺ User answered Claude's questions:
+  ⎿  · Which host should I deploy to? You aren't logged in to any yet. → Vercel 
+     (Recommended)
+
+⏺ Bash(npx -y vercel whoami 2>&1 | tail -1; gh auth status 2>&1 | grep -E
+      "account|Active")
+  ⎿  > Run `vercel deploy --temporary` to create a temporary deployment you
+      can claim later, or `vercel login` to log in.
+       ✓ Logged in to github.com account Illia Vysochin (keyring)
+       - Active account: true
+
+⏺ You still need to log in to both, and I'm writing the README and NOTES in the
+  meantime:
+  - ! npx vercel login
+⏺ Write(app/NOTES.md)
+  ⎿  Wrote 39 lines to app/NOTES.md
+      1 # Notes
+      3 ## Decisions
+      4 
+        om the API is parsed into `amount × 10^decimals` as a `BigInt` (`
+        src/amount.ts`), all math (min/max/fee/receive/overlay) happens o
+        he POST body. ETH has 18 decimals (`12.345678901234591676`). A JS
+         `number` can't hold that, and `0.1 + 0.2` errors would show up i
+        imal.js`). That works too, but BigInt is built in, and the parsin
+        g rules are short enough to own and test. USD values are `amount 
+         summed. The tota
+     … +100 lines (ctrl+o to expand)
+
+⏺ Write(app/README.md)
+  ⎿  Wrote 23 lines to app/README.md
+       1 # CashMine payback (practical task)
+       2 
+       3 **Live:** LIVE_URL
+       4 
+       5 ## Run locally
+       6 
+       7 ```sh
+       8 npm install
+       9 npm run web      # opens http://localhost:8081
+      10 npm test         # amount logic unit tests (Node test runner)
+     … +22 lines (ctrl+o to expand)
+
+⏺ Bash(grep -rn "ct1\.eyJ" --exclude-dir=node_modules . ; git add -A && git
+      commit -qm "Add NOTES.md and README.md…)
+  ⎿  7e08370 Add NOTES.md and README.md
+     820093e Don't tell the user 'nothing was claimed' if an earlier attemp
+     t had an unknown outcome
+     … +10 lines (ctrl+o to expand)
+
+⏺ I'm blocked until you log in. Time is about 14:10 UTC.
+
+  Done (6 commits, no token anywhere in the repo):
+  - Balances, Claim (Max, validation, fee/receive, confirm, live status) and
+    paginated Activity, all checked in headless Chrome at 390 px against the
+    live API.
+  - 6 unit tests pass, and typecheck is clean.
+  - NOTES.md and README.md are written.
+
+  Needs you:
+  1. Log in to Vercel and to the GitHub account you'll submit from:
+     - ! npx vercel login
+     - ! gh auth login
+
+     Tell me when you're done and I'll deploy, create the public repo and push.
+  2. NOTES.md has two TODOs in "Working with AI". I filled in only the moments
+     that actually happened here; the "prompt that didn't work" should be in
+     your own words.
+  3. ai-logs/: export this conversation near the end (/export in Claude Code).
+     Your token appears in plain text in this chat (in the brief you pasted and 
+     in my test commands), so it must be redacted before committing. I can
+     redact it once the file exists.
+  4. Commit hashes changed between my earlier commits and now (e83f1c7 →
+     466515b), though all commits are still there. Did you run anything on the
+     repo, like an amend or a hook? If not, it's worth a quick look before
+     pushing.
+
+✻ Cooked for 7m 46s · done 4:09 PM
+
+❯ You are performing a security audit of this React Native app. Work read-only  
+  for now: do NOT modify any files until I approve fixes.                       
+                                                                                
+  ## Step 1: Understand the project                                             
+  - Identify the setup: bare React Native or Expo (managed/prebuild), RN        
+  version, JS engine (Hermes/JSC), TypeScript or JS, state management,          
+  navigation library, and backend/API layer.                                    
+  - List the native folders (ios/, android/) and key config files               
+  (app.json/app.config.js, Info.plist, AndroidManifest.xml, build.gradle,       
+  Podfile, .env files, eas.json).                                               
+  - Summarize the architecture briefly before starting the audit.               
+                                                                                
+  ## Step 2: Audit these areas (aligned with OWASP MASVS / Mobile Top 10)       
+                                                                                
+  1. **Secrets and hardcoded credentials**                                      
+     - API keys, tokens, passwords, private keys, or secrets in source, config, 
+  .env files committed to git, or native files. Remember that anything in the   
+  JS bundle is extractable.                                                     
+     - Check git history for previously committed secrets (`git log -p` /       
+  search for key patterns).                                                     
+     - Check that .env and keystore files are in .gitignore.                    
+                                                                                
+  2. **Insecure data storage**                                                  
+     - Sensitive data (tokens, PII, credentials) stored in AsyncStorage, MMKV   
+  without encryption, Redux-persist, plain files, or SQLite. These should use   
+  Keychain/Keystore (react-native-keychain, expo-secure-store).                 
+     - Sensitive data in logs (console.log, analytics, crash reporters like     
+  Sentry).                                                                      
+     - Android `allowBackup`, iOS data protection classes, and whether caches   
+  or screenshots could leak sensitive screens.                                  
+                                                                                
+  3. **Network security**                                                       
+     - Any http:// URLs, disabled TLS validation, or `usesCleartextTraffic` /   
+  network_security_config allowing cleartext.                                   
+     - iOS App Transport Security exceptions (NSAllowsArbitraryLoads).          
+     - Whether certificate pinning is used where appropriate.                   
+     - Auth headers and tokens: how they're attached, refreshed, and cleared on 
+  logout.                                                                       
+                                                                                
+  4. **Authentication and session handling**                                    
+     - Token storage, expiry, refresh flow, logout cleanup.                     
+     - Client-side-only authorization checks (e.g. hiding admin UI without      
+  server enforcement).                                                          
+     - OAuth implementation: PKCE usage, redirect URI handling, state           
+  parameter.                                                                    
+     - Biometric auth: is it actually bound to a Keychain/Keystore secret, or   
+  just a boolean check?                                                         
+                                                                                
+  5. **Deep links and navigation**                                              
+     - URL schemes and universal/app links: are incoming parameters validated?  
+     - Can a deep link trigger sensitive actions or navigate to authenticated   
+  screens without checks?                                                       
+     - Android intent filters and `android:exported` on activities, services,   
+  receivers, and providers.                                                     
+                                                                                
+  6. **WebViews**                                                               
+     - react-native-webview usage: `javaScriptEnabled`, `originWhitelist`,      
+  `allowFileAccess`, `allowUniversalAccessFromFileURLs`, `onMessage` handlers,  
+  `injectedJavaScript`.                                                         
+     - Loading untrusted URLs or exposing a JS bridge to untrusted content.     
+                                                                                
+  7. **Input validation and injection**                                         
+     - `eval`, `new Function`, dynamic code execution, or unsafe HTML           
+  rendering.                                                                    
+     - SQL injection in local databases, unsafe string-built queries.           
+     - Unvalidated data passed to native modules.                               
+                                                                                
+  8. **Cryptography**                                                           
+     - Custom or weak crypto (MD5, SHA1 for security, ECB mode, hardcoded       
+  keys/IVs, Math.random for security purposes).                                 
+                                                                                
+  9. **Dependencies and supply chain**                                          
+     - Run `npm audit` / `yarn audit` (or equivalent) and summarize relevant    
+  high/critical issues.                                                         
+     - Flag abandoned, outdated, or suspicious packages, and native modules     
+  with known issues.                                                            
+     - Check OTA update setup (EAS Update / CodePush) for signing and           
+  integrity.                                                                    
+                                                                                
+  10. **Platform and build configuration**                                      
+      - Android: `debuggable`, minifyEnabled/ProGuard/R8, release signing       
+  config, minSdkVersion, permissions requested vs. actually needed.             
+      - iOS: permissions in Info.plist with justification, entitlements,        
+  debug-only code in release builds.                                            
+      - Dev tooling or debug menus reachable in production builds (`__DEV__`    
+  checks).                                                                      
+                                                                                
+  11. **Privacy**                                                               
+      - Third-party SDKs collecting data (analytics, ads, crash reporting) and  
+  what they receive.                                                            
+      - Clipboard usage with sensitive data, keyboard caching on sensitive      
+  inputs (`secureTextEntry`, `autoComplete`).                                   
+                                                                                
+  ## Step 3: Report                                                             
+  Produce a report sorted by severity (Critical, High, Medium, Low,             
+  Informational). For each finding include:                                     
+  - Title and severity                                                          
+  - File path and line number(s)                                                
+  - What the issue is and a realistic attack scenario                           
+  - Recommended fix with a code example where useful                            
+  - Confidence level (confirmed vs. needs manual verification)                  
+                                                                                
+  Avoid generic advice that doesn't apply to this codebase. If something can't  
+  be verified from the code alone (e.g. backend enforcement), say so            
+  explicitly. End with a short prioritized list of the top fixes.               
+                                                                                
+  After the report, ask me which findings I want you to fix. Do not change code 
+  until I confirm.                                                              
+
+⏺ Bash(cd ~/Project/cashmineTest/app; git log --oneline | head
+      -20; git status --short; git remote -v; ls -a; ls ai-logs 2>/dev/null;
+      cat app.json; c…)
+  ⎿  8fa0465 README: live link
+     2f601bc Compare server timestamps as dates, block double-tap confirm,
+     escalate long unknown claims, note known gaps
+     … +80 lines (ctrl+o to expand)
+
+⏺ Bash(cd ~/Project/cashmineTest/app; git ls-files | grep -v
+      '^assets/'; echo ---; git log -p --all | grep -nE
+      "ct1\.|eyJ[A-Za-z0-9_-]{10,}|Bearer [A…)
+  ⎿  .claude/settings.json
+     .gitignore
+     AGENTS.md
+     … +26 lines (ctrl+o to expand)
+
+⏺ Bash(cd ~/Project/cashmineTest/app; cat
+      .claude/settings.json; echo; date -u; cat -n src/api.ts src/claims.ts;
+      grep -nE "console\.|eval|new Functio…)
+  ⎿  {
+       "enabledPlugins": {
+         "expo@claude-plugins-official": true
+     … +201 lines (ctrl+o to expand)
+
+⏺ Bash(cd ~/Project/cashmineTest/app; cat -n App.tsx | sed -n
+      1,140p; git show 2f601bc --stat)
+  ⎿       1     import { useCallback, useEffect, useState } from 'react';
+          2     import { ActivityIndicator, FlatList, Pressable, ScrollView,
+     Sty
+     leSheet, Text, TextInput, View } from 'react-native';
+     … +151 lines (ctrl+o to expand)
+
+⏺ Bash(cd ~/Project/cashmineTest/app; npm audit --omit=dev
+      2>&1 | tail -15; echo ---; npm audit 2>&1 | grep -E
+      "severity|vulnerabilit" | tail -5; ech…)
+  ⎿        @expo/inline-modules  >=0.0.2-canary-20260409-6fc2991
+           Depends on vulnerable versions of @expo/config-plugins
+           node_modules/@expo/inline-modules
+     … +19 lines (ctrl+o to expand)
+
+⏺ Bash(cd ~/Project/cashmineTest/app; npm audit --omit=dev
+      --json 2>/dev/null | node -e 'const
+      a=JSON.parse(require("fs").readFileSync(0));for(const…)
+  ⎿  high braces - braces vulnerable to stack-exhaustion denial of service
+     through deeply nested patterns https://github.com/advisories/GHSA-vfj7
+     -8cjw-p6xm
+     … +6 lines (ctrl+o to expand)
+
+⏺ The deployed bundle contains the API base URL but no token, and the full git
+  history is clean. Two quick checks remain: inline scripts (for CSP) and how
+  fetch handles a malformed token.
+
+⏺ Bash(cd ~/Project/cashmineTest/app; cat dist/index.html |
+      head -c 1500; echo; find dist -name "*.map" | head -3; curl -s -o
+      /dev/null -w "%{http_co…)
+  ⎿  <!doctype html>
+     <html lang="en">
+       <head>
+     … +35 lines (ctrl+o to expand)
+
+⏺ Security audit: CashMine payback (web build)
+
+  Nothing was modified. The deadline is 16:00 UTC and it's about 14:26 now.
+
+  Step 1: Project setup
+
+  ┌─────────────┬───────────────────────────────────────────────────────────┐
+  │             │                                                           │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ Setup       │ Expo SDK 58 (managed, CNG), RN 0.88, react-native-web     │
+  │             │ 0.21, TypeScript (strict)                                 │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ Target      │ Web only, a static export deployed to Vercel              │
+  │             │ (cashmine-payback-two.vercel.app)                         │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ JS engine   │ Browser (Hermes/JSC don't apply)                          │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ State /     │ React useState plus localStorage; switching screens by    │
+  │ navigation  │ state, no router                                          │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ API layer   │ src/api.ts: fetch against one constant BASE_URL (HTTPS),  │
+  │             │ Bearer token, retries, Idempotency-Key on POST /claims    │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ Native      │ None. ios/ and android/ aren't generated and are          │
+  │ folders     │ gitignored                                                │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │             │ app.json (no scheme, no plugins, no permissions),         │
+  │ Config      │ tsconfig.json, .gitignore (covers .env*.local, *.jks,     │
+  │             │ *.p12, *.key, *.pem, dist/). No .env, eas.json or         │
+  │             │ vercel.json                                               │
+  ├─────────────┼───────────────────────────────────────────────────────────┤
+  │ Tracked     │ App.tsx, src/{api,claims,amount,amount.test}.ts, docs,    │
+  │ files       │ .claude/settings.json (a plugin flag only, harmless)      │
+  └─────────────┴───────────────────────────────────────────────────────────┘
+
+  A user pastes a token, it goes into localStorage['cm.token'], and it's
+  attached as Authorization: Bearer to every call to
+  https://task-api.cashmine.io. Claims are tracked in localStorage['cm.claims'].
+
+  Not applicable, because this is web-only with no native build:
+  Keychain/Keystore, allowBackup, ATS, cleartext config, android:exported,
+  intent filters, ProGuard/R8, signing, Info.plist permissions, WebView, OTA
+  updates, biometrics, OAuth/PKCE, deep links (app.json has no scheme). I didn't
+  inspect these further.
+
+  Step 3: Findings
+
+  HIGH
+
+  H1. The API token will leak into ai-logs/ unless it's redacted
+  - Where: this Claude Code conversation, which is required in ai-logs/ in the
+    public repo. ai-logs/ doesn't exist yet. Git history, tracked files, dist/
+    and the live bundle are all clean: I grepped for ct1.<REDACTED> across git log -p 
+    --all and the deployed JS.
+  - Issue: the token appears in plain text in this transcript: in the brief you
+    pasted, and in my curl and Playwright commands (CM_TOKEN='ct1…'). The brief
+    explicitly says to remove it. It stays valid until 2026-10-22 14:00 UTC.
+  - Attack: anyone reading the public repo, or a secret-scanning bot, can read
+    and create claims on your test account. It would also be an obvious negative
+    signal for the reviewers.
+  - Fix: after exporting, run sed -i '' 
+    's/ct1\.[A-Za-z0-9._-]*/ct1.<REDACTED>/g' ai-logs/* before git add, then
+    grep -r "ct1\.eyJ" ai-logs should return nothing. Do the same for any
+    screenshots.
+  - Confidence: confirmed (the token is in the transcript).
+
+  MEDIUM
+
+  M1. No CSP or anti-framing headers on the deployment, while the token sits in 
+  localStorage
+  - Where: the Vercel deployment. Its response headers include only HSTS (curl 
+    -I): no Content-Security-Policy, no X-Frame-Options/frame-ancestors. The
+    token is stored at src/api.ts:4-7.
+  - Issue: the token is a bearer secret readable by any script on the origin.
+    The code currently has no XSS sinks: no dangerouslySetInnerHTML, eval or new
+    Function, and all server strings render through <Text>, which escapes them.
+    So there's no injection today. But there's no defense in depth either.
+    Also, without frame-ancestors, the app can be framed, which allows
+    clickjacking of the "Confirm and claim" button. That's a money action, but
+    the attacker can't choose the amount and it needs two clicks.
+  - Fix: add a vercel.json to the deployed output. style-src 'unsafe-inline' is
+    needed because react-native-web injects <style> tags, and dist/index.html
+    has an inline <style> but no inline scripts:
+  { "headers": [{ "source": "/(.*)", "headers": [
+    { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src
+  'self'; style-src 'self' 'unsafe-inline'; connect-src 
+  https://task-api.cashmine.io; img-src 'self' data:; frame-ancestors 'none'; 
+  base-uri 'none'; form-action 'none'" },
+    { "key": "X-Content-Type-Options", "value": "nosniff" },
+    { "key": "Referrer-Policy", "value": "no-referrer" } ] }] }
+    localStorage itself stays, because the brief requires keeping the token in
+    the browser. I'd mention that trade-off in NOTES.md.
+  - Confidence: confirmed that the headers are missing. The CSP needs a test
+    deploy, since Expo web may need tweaks.
+
+  M2. A malformed token shows up as "Network error", and claims would be marked 
+  "unknown" forever
+  - Where: src/api.ts:57-58 (the catch {} maps every fetch rejection to
+    ApiError(0,'NETWORK')), TokenGate at App.tsx:28 (only trim()).
+  - Issue: I verified that a token containing a non-Latin-1 character makes
+    fetch throw TypeError: Cannot convert argument to a ByteString. A zero-width
+    space, which is common when copying from an HTML email, is one example.
+    That error is classified as outcomeUnknown, so balances show "Network error
+    or timeout" with an endless Retry, and the 401 path that says "change your
+    token" never triggers. It's input validation at the trust boundary, and it
+    misleads users on the money path.
+  - Fix: validate at the gate, and don't treat synchronous request-construction
+    errors as an unknown outcome:
+  // TokenGate
+  const clean = t.replace(/\s|\u200B|\uFEFF/g, '');
+  const valid = /^[\x21-\x7E]+$/.test(clean);
+  // api.ts catch
+  } catch (e) {
+    if (e instanceof TypeError && /ByteString|header/i.test(e.message)) throw
+  new ApiError(401, 'UNAUTHORIZED', 'Token contains invalid characters');
+    throw new ApiError(0, 'NETWORK', 'Network error or timeout');
+  }
+  - Confidence: confirmed (reproduced with Node fetch, which follows the same
+    WHATWG spec as browsers).
+
+  LOW
+
+  L1. The token input isn't masked and allows autofill/autocorrect history
+  - Where: App.tsx:27.
+  - Issue: the token shows in clear text while pasting (shoulder-surfing or
+    screen sharing, and the interview includes screen sharing). Mobile browsers
+    may also offer it in autofill.
+  - Fix: secureTextEntry autoComplete="off" spellCheck={false}.
+  - Confidence: confirmed.
+
+  L2. Corrupted localStorage crashes the app
+  - Where: src/claims.ts:16, an unguarded JSON.parse.
+  - Issue: bad JSON in cm.claims, from a manual edit, an older app version or an
+    extension, throws during useState init and leaves a blank screen. It's an
+    availability problem, not data exposure.
+  - Fix: try { return JSON.parse(...) ?? [] } catch { return [] }. Dropping the
+    list loses track of unknown claims, but the server stays idempotent, so no
+    money is lost.
+  - Confidence: confirmed by reading the code.
+
+  L3. npm audit: 15 high and 7 moderate, all in build tooling
+  - Where: package-lock.json. The advisories are braces (ReDoS), node-forge (RSA
+    signature verification) and uuid v3/v5 bounds, reached through @expo/cli,
+    @expo/config-plugins and @expo/prebuild-config.
+  - Issue: none of these ship in the web bundle. They run only on the developer
+    machine at build time. npm audit fix --force would downgrade or break
+    SDK 58.
+  - Fix: leave them, note it in NOTES.md, and run npx expo install --fix when
+    the SDK publishes patched versions.
+  - Confidence: confirmed that they're build-only.
+
+  INFORMATIONAL (no action needed)
+
+  - Secrets: none in source, config, history or the bundle. BASE_URL is a single
+    HTTPS constant at src/api.ts:1. No source maps are deployed (.map
+    returns 404).
+  - Crypto: the Idempotency-Key uses crypto.randomUUID(), a CSPRNG. No
+    Math.random, no custom crypto.
+  - Logging: no console.* calls and no analytics or crash SDKs. No third-party
+    data collection.
+  - Logout: "Change token" removes cm.token and cm.claims, then reloads. A 401
+    is surfaced to the user. There's no refresh flow, which is fine because the
+    API has none.
+  - Authorization: all enforcement (min, available, decimals, idempotency) is
+    server-side according to the API docs. The client checks are UX only. I
+    can't verify server behavior from code, but the docs state that available is
+    checked live.
+  - URL building: path and query parameters use encodeURIComponent
+    (api.ts:91,93,100).
+  - Multiple tabs: two tabs can both re-send an unknown claim. That's safe
+    because the key and body are identical.
+
+  Top fixes, prioritized
+
+  1. H1: redact the token from ai-logs/ before committing. This is required by
+     the brief.
+  2. M2: validate the token at the gate and stop mapping TypeError to "unknown
+     outcome". About 6 lines.
+  3. M1: add a vercel.json with CSP and frame-ancestors 'none', then redeploy
+     and test.
+  4. L1 + L2: secureTextEntry on the token field and a try around JSON.parse.
+     About 3 lines.
+  5. L3: one line in NOTES.md, no code change.
+
+  Which of these do you want me to fix? M2, L1 and L2 take about 5 minutes
+  together. M1 needs a redeploy and a re-test, so it's best done before 15:30
+  UTC.
+
+✻ Cooked for 1m 26s · done 4:26 PM
+
+❯ fix all findings exept of h1                                                  
+
+⏺ Bash(cd ~/Project/cashmineTest/app; ls -a dist; ls -a
+      dist/.vercel ../.vercel .vercel 2>&1 | head; cat dist/.vercel/project.json
+      2>/dev/null; date…)
+  ⎿  .
+     ..
+     .env.local
+     … +15 lines (ctrl+o to expand)
+
+⏺ The site was deployed from dist/, and there's a dist/.env.local I hadn't seen
+  before. Checking whether it's publicly served before I go further:
+
+⏺ Bash(cd ~/Project/cashmineTest/app; sed -E
+      's/=.*/=<hidden>/' dist/.env.local; cat dist/.gitignore; for f in
+      .env.local .vercel/project.json .gitig…)
+  ⎿  # Created by Vercel CLI
+     VERCEL_OIDC_TOKEN=<hidden>
+     .vercel
+     … +4 lines (ctrl+o to expand)
+
+⏺ It returns 404, so it isn't served. It's the Vercel CLI's OIDC token, kept in
+  the gitignored dist/. Applying the fixes now:
+
+⏺ Bash(cd ~/Project/cashmineTest/app; python3 - <<'EOF'
+      import re…)
+  ⎿  34:## Not done / known issues
+        - The AI wrote a unit test expecting `820.413207 USDT × 1.0002 = $8
+     20.57`. The test failed, and doing the math by hand gives 820.5773 → $
+     … +22 lines (ctrl+o to expand)
+  ⎿  Updated app/App.tsx (+9 -2)
+      18    return <Main />;
+      19  }
+      20  
+      21 +// Tokens are printable ASCII; strip whitespace and zero-width 
+         +chars that sneak in when copying from email.                   
+      22 +const cleanToken = (t: string) => t.replace(/[\s\u200B-\u200D\u
+         +FEFF]/g, '');                                                  
+      23 +const validToken = (t: string) => /^[\x21-\x7E]+$/.test(t);    
+      24 +                                                               
+      25  function TokenGate({ onDone }: { onDone: () => void }) {
+      26    const [t, setT] = useState('');
+      27 +  const clean = cleanToken(t);                                 
+      28    return (
+      29      <Page>
+      30        <Text style={s.h1}>CashMine</Text>
+      31        <Text style={s.muted}>Paste your API token to continue. I
+          t is stored only in this browser.</Text>
+      27 -      <TextInput style={s.input} value={t} onChangeText={setT} 
+         -placeholder="ct1...." autoCapitalize="none" autoCorrect={false}
+         - />                                                            
+      28 -      <Btn title="Continue" disabled={!t.trim()} onPress={() =>
+         - (setToken(t.trim()), onDone())} />                            
+      32 +      <TextInput style={s.input} value={t} onChangeText={setT} 
+         +placeholder="ct1...." autoCapitalize="none"                    
+      33 +        autoCorrect={false} autoComplete="off" spellCheck={fals
+         +e} secureTextEntry />                                          
+      34 +      {clean !== '' && !validToken(clean) && <Text style={s.err
+         +orText}>The token contains invalid characters.</Text>}         
+      35 +      <Btn title="Continue" disabled={!validToken(clean)} onPre
+         +ss={() => (setToken(clean), onDone())} />                      
+      36      </Page>
+      37    );
+      38  }
+  ⎿  Created app/public/vercel.json (+16 -0)
+       1 +{                                                              
+       2 +  "headers": [                                                 
+       3 +    {                                                          
+       4 +      "source": "/(.*)",                                       
+       5 +      "headers": [                                             
+       6 +        {                                                      
+       7 +          "key": "Content-Security-Policy",                    
+       8 +          "value": "default-src 'self'; script-src 'self'; styl
+         +e-src 'self' 'unsafe-inline'; connect-src https://task-api.cash
+         +mine.io; img-src 'self' data:; font-src 'self' data:; frame-anc
+         +estors 'none'; base-uri 'none'; form-action 'none'; object-src 
+         +'none'"                                                        
+       9 +        },                                                     
+      10 +        { "key": "X-Frame-Options", "value": "DENY" },         
+      11 +        { "key": "X-Content-Type-Options", "value": "nosniff" }
+         +,                                                              
+      12 +        { "key": "Referrer-Policy", "value": "no-referrer" }   
+      13 +      ]                                                        
+      14 +    }                                                          
+      15 +  ]                                                            
+      16 +}                                                              
+  ⎿  Updated app/src/api.ts (+5 -1)
+      54        signal: ctrl.signal,
+      55        headers: { Authorization: `Bearer ${getToken()}`, 'Conten
+          t-Type': 'application/json', ...init.headers },
+      56      });
+      57 -  } catch {                                                    
+      57 +  } catch (e) {                                                
+      58 +    // fetch rejects synchronously-invalid requests (e.g. non-A
+         +SCII token in the header) with a TypeError.                    
+      59 +    // Nothing was sent, so this is a definite failure, not an 
+         +unknown outcome.                                               
+      60 +    if (e instanceof TypeError && /ByteString|header/i.test(e.m
+         +essage))                                                       
+      61 +      throw new ApiError(401, 'UNAUTHORIZED', 'Token contains i
+         +nvalid characters');                                           
+      62      throw new ApiError(0, 'NETWORK', 'Network error or timeout'
+          );
+      63    } finally {
+      64      clearTimeout(timer);
+  ⎿  Updated app/src/claims.ts (+8 -1)
+      13  
+      14  const KEY = 'cm.claims';
+      15  const inflight = new Set<string>(); // claim keys with a POST i
+          n flight
+      16 -const load = (): Tracked[] => JSON.parse(localStorage.getItem(K
+         -EY) ?? '[]');                                                  
+      16 +const load = (): Tracked[] => {                                
+      17 +  try {                                                        
+      18 +    const l = JSON.parse(localStorage.getItem(KEY) ?? '[]');   
+      19 +    return Array.isArray(l) ? l : [];                          
+      20 +  } catch {                                                    
+      21 +    return []; // corrupted storage: lose local tracking only; 
+         +the server stays idempotent, so no money is at risk            
+      22 +  }                                                            
+      23 +};                                                             
+      24  
+      25  export function useClaims() {
+      26    // A claim still "sending" when the page closed has an unknow
+          n outcome: resume it.
+
+⏺ Bash(cd ~/Project/cashmineTest/app; python3 - <<'EOF'
+      p='NOTES.md'; s=open(p).read()…)
+  ⎿  ℹ pass 6
+     ℹ fail 0
+     … +8 lines (ctrl+o to expand)
+  ⎿  Updated app/NOTES.md (+2 -0)
+      31     - The first version said "Nothing was claimed" for any defin
+          itive error. That's false when an earlier attempt for the same 
+          key timed out, because the claim may exist. This was caught whe
+          n reviewing the unknown-outcome flow and fixed with an `uncerta
+          in` flag.
+      32  3. **Disagreed with / rejected a suggestion:** the `AGENTS.md` 
+          generated by `create-expo-app` tells the agent to always use Ex
+          po Router. I rejected that for four screens (see above). TODO (
+          Illia: add your own if there's a better one).
+      33  
+      34 +**Security.** The brief requires keeping the token in the brows
+         +er, so it goes in `localStorage`. Any script on the origin coul
+         +d read it, so the deployment sends a strict CSP (`connect-src` 
+         +only the API, `script-src 'self'`, `frame-ancestors 'none'` aga
+         +inst clickjacking of the confirm button; see `public/vercel.jso
+         +n`), and the app has no HTML or `eval` sinks. The token field i
+         +s masked, and the token is cleaned of whitespace and zero-width
+         + characters, then checked to be printable ASCII. A malformed to
+         +ken used to show up as a "network error". `npm audit` reports 1
+         +5 high and 7 moderate advisories, all in Expo's build-time CLI 
+         +(`braces`, `node-forge`, `uuid`) and none in the shipped bundle
+         +. `audit fix --force` would break SDK 58, so I left them.      
+      35 +                                                               
+      36  ## Not done / known issues
+      37  - Activity doesn't link claims to their reversal or accrual (`r
+          elatedId`), and it doesn't auto-refresh after a new claim (reop
+          en the screen).
+      38  - No pull-to-refresh gesture on web, only a Refresh button.
+  ⎿  (timeout 5m)
+
+⏺ As expected, the export wiped the Vercel link, so I'm restoring it. Next is a
+  preview deploy to test the CSP before touching production:
+
+⏺ Bash(cd ~/Project/cashmineTest/app; cp -R
+      /tmp/vercel-link-bak dist/.vercel; cp /tmp/vercel-env-bak dist/.env.local;
+      printf ".vercel\n.env*\n" > di…)
+  ⎿      "inspectorUrl": "https://vercel.com/eques-auratus/cashmine-payback
+     /97BYN1YX7DNUQqkDDBMZkXSfmh1w",
+         "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_97
+     … +3 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+⏺ The preview is behind Vercel auth, so I'll test the same CSP locally with
+  serve and identical headers:
+
+⏺ Bash(pkill -f "serve dist -l 8099" ; rm -rf /tmp/csptest && mkdir /tmp/csptest
+      && cp -R ~/Project/cashmineTest/app/dist/{_expo,index.h
+      tml,favicon.i…)
+  ⎿  Content-Security-Policy: default-src 'self'; script-src 'self'; style-
+     src 'self' 'unsafe-inline'; connect-src https://task-api.cashmine.io;
+     img-src 'self' data:; font-src 'self' data:; frame-ancestors 'none'; b
+     … +5 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to ~/Project/cashmineTest
+  ⎿  (timeout 3m)
+
+⏺ All checks pass under the CSP: masking, bad token rejection, cleanup of pasted
+  tokens, and recovery from corrupted storage. Now committing, pushing, and
+  deploying to production.
+
+⏺ Bash(cd ~/Project/cashmineTest/app && grep -rn "ct1\.eyJ"
+      --exclude-dir=node_modules --exclude-dir=dist . ; git add -A && git commit
+      -qm "Security…)
+  ⎿    Production      https://cashmine-payback-3zeckocz1-eques-auratus.ver
+     cel.app
+     ▲ Aliased         https://cashmine-payback-two.vercel.app
+     … +11 lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ Bash(cd ~/Project/cashmineTest/app && git log --oneline -1
+      && git status -sb | head -1; sed -i ''
+      's#http://localhost:8098#https://cashmine-payback…)
+  ⎿  491ac6b Security hardening: CSP/anti-framing headers, validate and mas
+     k token, treat invalid-header fetch errors as 401, survive corrupted s
+     torage
+     … +5 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to ~/Project/cashmineTest
+  ⎿  (timeout 3m)
+
+⏺ I fixed all findings except H1. They're committed as 491ac6b, pushed to
+  GitHub, and deployed to https://cashmine-payback-two.vercel.app. I re-ran the
+  checks in headless Chrome against the live site and they all pass, with no CSP
+  errors in the console.
+
+  Finding: M1 No CSP or framing protection
+  Fix: Added public/vercel.json, which Expo copies into the build. It allows
+  scripts only from the site itself, API calls only to task-api.cashmine.io,
+  and blocks framing.
+  Result on the live site: All four headers are present. /vercel.json itself
+  returns 404, so it isn't publicly served.
+  ────────────────────────────────────────
+  Finding: M2 Bad token showed up as "Network error"
+  Fix: The token field strips whitespace and zero-width characters, then
+  requires
+  printable ASCII. src/api.ts now treats a header-encoding error as 401 instead
+   of an unknown outcome.
+  Result on the live site: abcédef is rejected. A token pasted with spaces and a
+
+  zero-width space is cleaned and balances load.
+  ────────────────────────────────────────
+  Finding: L1 Token visible while typing
+  Fix: The field is masked, with autocomplete and spellcheck off.
+  Result on the live site: It renders as a password field with autocomplete off.
+  ────────────────────────────────────────
+  Finding: L2 Corrupted storage blanked the app
+  Fix: load() in src/claims.ts now catches bad data and falls back to an empty
+  list.
+  Result on the live site: With broken data in storage, the app still loads.
+  ────────────────────────────────────────
+  Finding: L3 npm audit advisories
+  Fix: No code change. The new "Security" paragraph in NOTES.md explains they're
+
+  all in build-time tooling.
+  Result on the live site: —
+
+  Typecheck is clean and the 6 unit tests pass.
+
+  Things to know before 16:00 UTC:
+  - H1 is still open. When you export this conversation into ai-logs/, redact
+    the token before committing. It appears many more times now, including in
+    the test commands I ran in this round.
+  - Redeploying: npx expo export -p web deletes the Vercel link in dist/. I
+    restored it this time, but if you redeploy yourself, run vercel deploy 
+    --prod from dist/ and re-link the project first if it asks.
+  - NOTES.md still has two TODOs in "Working with AI" for you to write in your
+    own words.
+
+✻ Worked for 1m 43s · done 4:30 PM
