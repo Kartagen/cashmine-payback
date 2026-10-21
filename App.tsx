@@ -18,14 +18,21 @@ export default function App() {
   return <Main />;
 }
 
+// Tokens are printable ASCII; strip whitespace and zero-width chars that sneak in when copying from email.
+const cleanToken = (t: string) => t.replace(/[\s\u200B-\u200D\uFEFF]/g, '');
+const validToken = (t: string) => /^[\x21-\x7E]+$/.test(t);
+
 function TokenGate({ onDone }: { onDone: () => void }) {
   const [t, setT] = useState('');
+  const clean = cleanToken(t);
   return (
     <Page>
       <Text style={s.h1}>CashMine</Text>
       <Text style={s.muted}>Paste your API token to continue. It is stored only in this browser.</Text>
-      <TextInput style={s.input} value={t} onChangeText={setT} placeholder="ct1...." autoCapitalize="none" autoCorrect={false} />
-      <Btn title="Continue" disabled={!t.trim()} onPress={() => (setToken(t.trim()), onDone())} />
+      <TextInput style={s.input} value={t} onChangeText={setT} placeholder="ct1...." autoCapitalize="none"
+        autoCorrect={false} autoComplete="off" spellCheck={false} secureTextEntry />
+      {clean !== '' && !validToken(clean) && <Text style={s.errorText}>The token contains invalid characters.</Text>}
+      <Btn title="Continue" disabled={!validToken(clean)} onPress={() => (setToken(clean), onDone())} />
     </Page>
   );
 }
@@ -282,7 +289,9 @@ function ActivityScreen({ onBack }: { onBack: () => void }) {
   useEffect(() => { more(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    // Bounded height so the FlatList itself scrolls (body has overflow: hidden on web) and Back stays on top.
+    // On web #root is a flex ROW, so the outer View is needed: it fills the screen as a column, which lets
+    // the page center horizontally and bound its height, so only the FlatList scrolls and Back stays on top.
+    <View style={{ flex: 1 }}>
     <View style={[s.page, { flex: 1, minHeight: 0 }]}>
       <Back onPress={onBack} />
       <Text style={s.h1}>Activity</Text>
@@ -308,6 +317,7 @@ function ActivityScreen({ onBack }: { onBack: () => void }) {
           : <Btn title="Load more" small secondary onPress={more} />
         }
       />
+    </View>
     </View>
   );
 }

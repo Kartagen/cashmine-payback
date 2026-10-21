@@ -54,7 +54,11 @@ async function once<T>(path: string, init: RequestInit = {}): Promise<T> {
       signal: ctrl.signal,
       headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json', ...init.headers },
     });
-  } catch {
+  } catch (e) {
+    // fetch rejects synchronously-invalid requests (e.g. non-ASCII token in the header) with a TypeError.
+    // Nothing was sent, so this is a definite failure, not an unknown outcome.
+    if (e instanceof TypeError && /ByteString|header/i.test(e.message))
+      throw new ApiError(401, 'UNAUTHORIZED', 'Token contains invalid characters');
     throw new ApiError(0, 'NETWORK', 'Network error or timeout');
   } finally {
     clearTimeout(timer);

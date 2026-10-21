@@ -13,7 +13,14 @@ export type Tracked = {
 
 const KEY = 'cm.claims';
 const inflight = new Set<string>(); // claim keys with a POST in flight
-const load = (): Tracked[] => JSON.parse(localStorage.getItem(KEY) ?? '[]');
+const load = (): Tracked[] => {
+  try {
+    const l = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+    return Array.isArray(l) ? l : [];
+  } catch {
+    return []; // corrupted storage: lose local tracking only; the server stays idempotent, so no money is at risk
+  }
+};
 
 export function useClaims() {
   // A claim still "sending" when the page closed has an unknown outcome: resume it.
