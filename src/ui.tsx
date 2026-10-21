@@ -4,13 +4,15 @@ import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, Text, V
 import { CheckCircleIcon, CircleNotchIcon, WarningCircleIcon, XIcon } from 'phosphor-react-native';
 import { ApiError, type Activity } from './api';
 import type { Tracked } from './claims';
+import { claimState, unresolved } from './claimState';
 import { color, hairline, num, space, type } from './theme';
+
+export { claimState, unresolved }; // pure, in their own file so Node tests can import them
 
 export const errText = (e: unknown) =>
   e instanceof ApiError && e.status === 401 ? 'Your token is invalid or expired. Use Change token on the Balance screen.'
     : e instanceof Error ? e.message : String(e);
 export const activityLabel = (a: Activity) => a.type[0].toUpperCase() + a.type.slice(1);
-export const unresolved = (t: Tracked) => !t.error && (!t.claim || t.claim.status === 'pending');
 
 // Web: reserve the scrollbar's space on both edges, so the centered column doesn't shift when content starts to overflow.
 export const gutter = (Platform.OS === 'web' ? { scrollbarGutter: 'stable both-edges' } : {}) as ViewStyle;
@@ -55,21 +57,6 @@ export const ErrorLine = ({ error, onRetry }: { error: unknown; onRetry: () => v
     <Btn title="Retry" kind="secondary" onPress={onRetry} />
   </View>
 );
-
-export function claimState(t: Tracked): { title: string; detail: string; tone: 'info' | 'ok' | 'bad' } {
-  const what = `${t.body.amount} ${t.body.asset}`;
-  if (t.error && t.uncertain)
-    return { title: 'Could not confirm claim', detail: `${what}: ${t.error}. It may have gone through. Check Activity before claiming again.`, tone: 'bad' };
-  if (t.error) return { title: 'Claim not submitted', detail: `${what}: ${t.error}. Nothing was claimed.`, tone: 'bad' };
-  if (!t.claim && t.unknown)
-    return { title: 'Checking your claim…', tone: 'info', detail: `The connection dropped while sending ${what}. We keep checking with the same key, so it can't be claimed twice.`
-      + (Date.now() - (t.sentAt ?? Date.now()) > 60000 ? ' Still no answer from the server. Check Activity before trying again.' : '') };
-  if (!t.claim) return { title: 'Sending claim…', detail: what, tone: 'info' };
-  const c = t.claim;
-  if (c.status === 'pending') return { title: 'Claim in progress', detail: `${what}, you receive ${c.receiveAmount}. Usually under 20 s.`, tone: 'info' };
-  if (c.status === 'completed') return { title: 'Claim completed', detail: `${c.receiveAmount} ${c.asset} sent.`, tone: 'ok' };
-  return { title: 'Claim failed', detail: `${c.failureReason ?? 'Unknown reason'}. ${what} is back in your available balance.`, tone: 'bad' };
-}
 
 export function StateIcon({ t, size = 20 }: { t: Tracked; size?: number }) {
   const { tone } = claimState(t);

@@ -2,6 +2,10 @@ export const BASE_URL = 'https://task-api.cashmine.io';
 
 const TOKEN_KEY = 'cm.token';
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
+// Tokens are printable ASCII; strip whitespace and zero-width chars that sneak in when copying from email.
+export const cleanToken = (t: string) => t.replace(/[\s\u200B-\u200D\uFEFF]/g, '');
+export const validToken = (t: string) => /^[\x21-\x7E]+$/.test(t);
+
 /** Claims tracked on this device belong to the old token, so they are dropped too. */
 export const setToken = (t: string | null) => {
   if (t) localStorage.setItem(TOKEN_KEY, t);

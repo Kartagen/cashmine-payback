@@ -65,3 +65,38 @@ test('claim overlay: applied until the snapshot catches up, never for failed cla
   [b] = applyClaims(snap('2026-10-21T14:00:10.5Z', '0.009', '0.001'), [claim('pending')]);
   assert.deepEqual([b.available, b.adjusted], ['0.009', false]);
 });
+
+test('integer prices, 0-decimal assets, and toUnits edge cases', () => {
+  assert.equal(usdCents('0.5', 8, '60000'), 3000000n); // price without a decimal point
+  assert.equal(formatUsd(usdCents('0.5', 8, '60000')), '$30,000.00');
+  assert.equal(fromUnits(toUnits('5', 0), 0), '5');
+  assert.equal(toUnits('-1.5', 2), -150n);
+  assert.throws(() => toUnits('abc', 8), /bad amount/);
+  assert.throws(() => toUnits('0.123', 2), /too many decimals/);
+});
+
+test('amount must be greater than the fee, so you never receive 0', () => {
+  const o = { ...BTC, minAmount: '0.00001' }; // min below the fee, so the fee rule is what stops it
+  assert.match((checkAmount('0.00001', o) as any).error, /greater than the fee/);
+  assert.match((checkAmount('0.00002', o) as any).error, /greater than the fee/); // equal to the fee: would receive 0
+  assert.equal(checkAmount('0.00003', o).ok, true);
+});
+
+test('claim overlay: completed, several claims, other assets, never below zero', () => {
+  const snap = { asOf: '2026-10-21T14:00:00Z', items: [
+    { asset: 'BTC', decimals: 8, available: '0.01', pending: '0', claiming: '0', usdPrice: '1' },
+    { asset: 'ETH', decimals: 18, available: '2', pending: '0', claiming: '0', usdPrice: '1' }] };
+  const tr = (asset: string, amount: string, status: 'pending' | 'completed') => ({
+    key: asset + amount, body: { asset, amount, destinationId: 'd' },
+    claim: { id: 'c', asset, amount, destinationId: 'd', fee: '0', receiveAmount: amount, status, failureReason: null, createdAt: '2026-10-21T14:00:10Z', updatedAt: '' } });
+  // completed: money left available, and it's no longer "claiming"
+  let [btc, eth] = applyClaims(snap, [tr('BTC', '0.004', 'completed')]);
+  assert.deepEqual([btc.available, btc.claiming, btc.adjusted], ['0.006', '0', true]);
+  assert.deepEqual([eth.available, eth.adjusted], ['2', false]); // other asset untouched
+  // several claims add up
+  [btc] = applyClaims(snap, [tr('BTC', '0.004', 'pending'), tr('BTC', '0.003', 'pending')]);
+  assert.deepEqual([btc.available, btc.claiming], ['0.003', '0.007']);
+  // more claimed than the stale snapshot shows: clamp at 0, never negative
+  [btc] = applyClaims(snap, [tr('BTC', '0.008', 'pending'), tr('BTC', '0.008', 'pending')]);
+  assert.equal(btc.available, '0');
+});

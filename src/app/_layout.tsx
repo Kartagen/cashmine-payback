@@ -4,7 +4,7 @@ import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { CaretLeftIcon } from 'phosphor-react-native';
-import { getToken, setToken } from '../api';
+import { cleanToken, getToken, setToken, validToken } from '../api';
 import { AppProvider } from '../store';
 import { color, type } from '../theme';
 import { Btn, gutter, Page, s } from '../ui';
@@ -58,10 +58,6 @@ const WebHeader = () => (
     </View>
   </View>
 );
-
-// Tokens are printable ASCII; strip whitespace and zero-width chars that sneak in when copying from email.
-const cleanToken = (t: string) => t.replace(/[\s\u200B-\u200D\uFEFF]/g, '');
-const validToken = (t: string) => /^[\x21-\x7E]+$/.test(t);
 
 function TokenGate({ onDone }: { onDone: () => void }) {
   const [t, setT] = useState('');

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, ApiError, type Claim, type ClaimBody } from './api';
+import { api, ApiError, type Claim, type ClaimBody } from './api.ts';
 
 /**
  * A claim this device submitted. `claim` is missing until the server has answered;
@@ -22,10 +22,16 @@ const load = (): Tracked[] => {
   }
 };
 
+/** On page load: a claim still "sending" when the page closed has an unknown outcome, so resume checking it. */
+export const resume = (l: Tracked[]): Tracked[] => l.map((t) => (!t.claim && !t.error ? { ...t, unknown: true } : t));
+
+/** What a failed send means. Timeout, network or 5xx: maybe created, keep resending with the same key. Anything else: definite. */
+export const outcome = (e: unknown): Partial<Tracked> =>
+  e instanceof ApiError && e.outcomeUnknown ? { unknown: true, uncertain: true } : { error: e instanceof Error ? e.message : String(e) };
+
 export function useClaims() {
-  // A claim still "sending" when the page closed has an unknown outcome: resume it.
   const [list, setList] = useState<Tracked[]>(() => {
-    const l = load().map((t) => (!t.claim && !t.error ? { ...t, unknown: true } : t));
+    const l = resume(load());
     localStorage.setItem(KEY, JSON.stringify(l));
     return l;
   });
@@ -46,8 +52,7 @@ export function useClaims() {
       try {
         update(t.key, { claim: await api.createClaim(t.body, t.key) });
       } catch (e) {
-        if (e instanceof ApiError && e.outcomeUnknown) update(t.key, { unknown: true, uncertain: true });
-        else update(t.key, { error: e instanceof Error ? e.message : String(e) });
+        update(t.key, outcome(e));
       } finally {
         inflight.delete(t.key);
       }
