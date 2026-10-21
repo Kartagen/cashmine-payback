@@ -10,8 +10,7 @@ import { Btn, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../../
 
 export default function ClaimScreen() {
   const { items, claims, error: balError, load } = useApp();
-  const params = useLocalSearchParams<{ asset: string }>();
-  const [asset, setAsset] = useState(params.asset);
+  const { asset } = useLocalSearchParams<{ asset: string }>(); // the URL is the selected tab
   const [opts, setOpts] = useState<ClaimOptions | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [amount, setAmount] = useState('');
@@ -55,7 +54,7 @@ export default function ClaimScreen() {
             const on = x.asset === asset;
             return (
               <Pressable key={x.asset} accessibilityRole="tab" accessibilityState={{ selected: on }}
-                onPress={() => (setAsset(x.asset), setAmount(''))}
+                onPress={() => (router.setParams({ asset: x.asset }), setAmount(''))}
                 style={{ paddingVertical: space.s, borderBottomWidth: 2, borderColor: on ? color.text : 'transparent', marginBottom: -1 }}>
                 <Text style={[type.bodyStrong, !on && { color: color.secondary }]}>{x.asset}</Text>
               </Pressable>
