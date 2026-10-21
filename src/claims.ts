@@ -6,7 +6,10 @@ import { api, ApiError, type Claim, type ClaimBody } from './api';
  * if the request failed with an unknown outcome, `unknown` is set and we keep retrying
  * with the SAME Idempotency-Key, which can never create a second claim.
  */
-export type Tracked = { key: string; body: ClaimBody; claim?: Claim; unknown?: boolean; error?: string };
+export type Tracked = {
+  key: string; body: ClaimBody; claim?: Claim; unknown?: boolean; error?: string;
+  uncertain?: boolean; // an earlier attempt had an unknown outcome, so an error later does NOT mean "nothing claimed"
+};
 
 const KEY = 'cm.claims';
 const inflight = new Set<string>(); // claim keys with a POST in flight
@@ -36,7 +39,7 @@ export function useClaims() {
       try {
         update(t.key, { claim: await api.createClaim(t.body, t.key) });
       } catch (e) {
-        if (e instanceof ApiError && e.outcomeUnknown) update(t.key, { unknown: true });
+        if (e instanceof ApiError && e.outcomeUnknown) update(t.key, { unknown: true, uncertain: true });
         else update(t.key, { error: e instanceof Error ? e.message : String(e) });
       } finally {
         inflight.delete(t.key);

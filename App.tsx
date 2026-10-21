@@ -219,6 +219,8 @@ function ClaimScreen({ items, asset: initial, busy, onBack, onSubmit }: {
 
 function claimState(t: Tracked): { title: string; detail: string; tone: 'info' | 'ok' | 'bad' } {
   const what = `${t.body.amount} ${t.body.asset}`;
+  if (t.error && t.uncertain)
+    return { title: 'Could not confirm claim', detail: `${what}: ${t.error}. It may have gone through — check Activity before claiming again.`, tone: 'bad' };
   if (t.error) return { title: 'Claim not submitted', detail: `${what}: ${t.error}. Nothing was claimed.`, tone: 'bad' };
   if (!t.claim && t.unknown)
     return { title: 'Checking your claim…', detail: `We lost the connection while sending ${what}. We keep checking safely — it can never be claimed twice.`, tone: 'info' };
