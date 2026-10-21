@@ -38,7 +38,8 @@ export default function RootLayout() {
             <Stack.Screen name="index" options={{ title: 'Balance', headerShown: !web }} />
             <Stack.Screen name="claim/[asset]" options={{ title: 'Claim' }} />
             <Stack.Screen name="status/[key]" options={{ title: 'Claim status' }} />
-            <Stack.Screen name="activity" options={{ title: 'Activity' }} />
+            <Stack.Screen name="activity/index" options={{ title: 'Activity' }} />
+            <Stack.Screen name="activity/[id]" options={{ title: 'Details' }} />
           </Stack>
         </AppProvider>
       )}

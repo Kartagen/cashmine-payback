@@ -35,10 +35,11 @@ All of this was built with Claude Code (`ai-logs/`).
 **Security.** The brief requires keeping the token in the browser, so it goes in `localStorage`. Any script on the origin could read it, so the deployment sends a strict CSP (`connect-src` only the API, `script-src 'self'`, `frame-ancestors 'none'` against clickjacking of the confirm button; see `public/vercel.json`), and the app has no HTML or `eval` sinks. The token field is masked, and the token is cleaned of whitespace and zero-width characters, then checked to be printable ASCII. A malformed token used to show up as a "network error". `npm audit` reports 15 high and 7 moderate advisories, all in Expo's build-time CLI (`braces`, `node-forge`, `uuid`) and none in the shipped bundle. `audit fix --force` would break SDK 58, so I left them.
 
 ## Not done / known issues
-- Activity doesn't link claims to their reversal or accrual (`relatedId`), and it doesn't auto-refresh after a new claim (reopen the screen).
+- Activity items open a detail screen (`/activity/[id]`) that links to the related item via `relatedId` when it's loaded, and for claims fetches `GET /v1/claims/{id}` for fee, destination and `failureReason`. There's no single-item activity endpoint, so a detail URL opened cold (reload or shared link) asks you to open it from Activity. Activity doesn't auto-refresh after a new claim (reopen the screen).
+- I'm assuming a claim row's `relatedId` is its claim id (falling back to its own id). If that's wrong, the claim details section just doesn't show.
 - No pull-to-refresh gesture on web, only a Refresh button.
 - A server `400 VALIDATION` on submit is shown on the status screen ("Claim not submitted… nothing was claimed"), not inline next to the field it names.
 - While a claim's outcome is unknown, the balance isn't reduced, because there's no server claim to reconcile against. Instead, the Claim button for that asset is locked until the outcome is known.
 - Claim history is kept only on this device. Another device won't see "unknown" claims from this one.
 - No component or E2E tests. The flow was checked manually in headless Chrome at 390 px against the live API, including real 503/504 responses.
-- Next: showing `failureReason` in Activity, and an E2E test with a mocked API for the timeout path.
+- Next: an E2E test with a mocked API for the timeout path.

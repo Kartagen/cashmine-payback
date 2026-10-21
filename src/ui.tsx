@@ -1,12 +1,13 @@
 import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 import { CheckCircleIcon, CircleNotchIcon, WarningCircleIcon, XIcon } from 'phosphor-react-native';
-import { ApiError } from './api';
+import { ApiError, type Activity } from './api';
 import type { Tracked } from './claims';
 import { color, hairline, num, space, type } from './theme';
 
 export const errText = (e: unknown) =>
   e instanceof ApiError && e.status === 401 ? 'Your token is invalid or expired. Use Change token on the Balance screen.'
     : e instanceof Error ? e.message : String(e);
+export const activityLabel = (a: Activity) => a.type[0].toUpperCase() + a.type.slice(1);
 export const unresolved = (t: Tracked) => !t.error && (!t.claim || t.claim.status === 'pending');
 
 export function Page({ children }: { children: React.ReactNode }) {

@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
-import { api, type Activity } from '../api';
-import { color, num, space, type } from '../theme';
-import { Btn, ErrorLine, s, Title } from '../ui';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { CaretRightIcon } from 'phosphor-react-native';
+import { api, type Activity } from '../../api';
+import { color, num, space, type } from '../../theme';
+import { activityCache } from '../../store';
+import { activityLabel, Btn, ErrorLine, s, Title } from '../../ui';
 
 export default function ActivityScreen() {
   const [items, setItems] = useState<Activity[]>([]);
@@ -10,19 +13,23 @@ export default function ActivityScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
+  const busy = useRef(false); // sync guard: on mount, the effect and onEndReached both call more() before `loading` updates
   const more = useCallback(async () => {
-    if (loading || cursor === null) return;
+    if (busy.current || cursor === null) return;
+    busy.current = true;
     setLoading(true); setError(null);
     try {
       const page = await api.activity(cursor);
+      page.items.forEach((a) => activityCache.set(a.id, a));
       setItems((l) => [...l, ...page.items]);
       setCursor(page.nextCursor);
     } catch (e) {
       setError(e);
     } finally {
+      busy.current = false;
       setLoading(false);
     }
-  }, [cursor, loading]);
+  }, [cursor]);
   useEffect(() => { more(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -36,13 +43,15 @@ export default function ActivityScreen() {
       onEndReached={() => { if (error == null) more(); }} // after an error, only the Retry button reloads
       onEndReachedThreshold={0.5}
       renderItem={({ item: a }) => (
-        <View style={[s.row, s.divider, { paddingVertical: space.m }]}>
-          <View style={{ flexShrink: 1, gap: 2 }}>
-            <Text style={type.bodyStrong}>{a.type[0].toUpperCase() + a.type.slice(1)}{a.exchange ? ` · ${a.exchange}` : ''}</Text>
+        <Pressable onPress={() => router.push(`/activity/${a.id}`)} accessibilityRole="link"
+          style={({ pressed }) => [s.row, s.divider, { paddingVertical: space.m }, pressed && { opacity: 0.6 }]}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={type.bodyStrong}>{activityLabel(a)}{a.exchange ? ` · ${a.exchange}` : ''}</Text>
             <Text style={[type.footnote, num]}>{new Date(a.createdAt).toLocaleString()} · {a.status}</Text>
           </View>
           <Text style={[type.bodyStrong, num]}>{a.amount} {a.asset}</Text>
-        </View>
+          <CaretRightIcon size={16} color={color.secondary} />
+        </Pressable>
       )}
       ListFooterComponent={
         error != null ? <ErrorLine error={error} onRetry={more} />
