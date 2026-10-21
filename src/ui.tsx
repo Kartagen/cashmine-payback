@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 import { CheckCircleIcon, CircleNotchIcon, WarningCircleIcon, XIcon } from 'phosphor-react-native';
 import { ApiError, type Activity } from './api';
@@ -22,9 +24,12 @@ export function Page({ children }: { children: React.ReactNode }) {
   return <ScrollView style={scrollStyle} contentContainerStyle={s.page} contentInsetAdjustmentBehavior="automatic">{children}</ScrollView>;
 }
 
-// iOS shows the native large title and Android the app bar title; only web draws it in content.
-export const Title = ({ children }: { children: string }) =>
-  Platform.OS === 'web' ? <Text style={[type.largeTitle, { marginBottom: space.s }]} accessibilityRole="header">{children}</Text> : null;
+// iOS shows the native large title and Android the app bar title; only web draws it in content,
+// and names the browser tab after it (on focus, so it's right again after Back).
+export function Title({ children }: { children: string }) {
+  useFocusEffect(useCallback(() => { if (Platform.OS === 'web') document.title = `${children} · CashMine`; }, [children]));
+  return Platform.OS === 'web' ? <Text style={[type.largeTitle, { marginBottom: space.s }]} accessibilityRole="header">{children}</Text> : null;
+}
 
 export const Line = ({ label, value, strong }: { label: string; value: string; strong?: boolean }) => (
   <View style={s.row}>
