@@ -282,13 +282,15 @@ function ActivityScreen({ onBack }: { onBack: () => void }) {
   useEffect(() => { more(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <View style={s.page}>
+    // Bounded height so the FlatList itself scrolls (body has overflow: hidden on web) and Back stays on top.
+    <View style={[s.page, { flex: 1, minHeight: 0 }]}>
       <Back onPress={onBack} />
       <Text style={s.h1}>Activity</Text>
       <FlatList
+        style={{ flex: 1 }}
         data={items}
         keyExtractor={(a) => a.id}
-        onEndReached={more}
+        onEndReached={() => { if (error == null) more(); }} // after an error, only the Retry button reloads
         onEndReachedThreshold={0.5}
         renderItem={({ item: a }) => (
           <View style={[s.row, s.activity]}>
