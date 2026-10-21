@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { CircleIcon, RadioButtonIcon } from 'phosphor-react-native';
 import { api, type ClaimOptions } from '../../api';
 import { checkAmount, fromUnits } from '../../amount';
-import { useApp } from '../../store';
+import { optionsCache, useApp } from '../../store';
 import { color, space, type } from '../../theme';
 import { Btn, ErrorLine, Line, Loader, Page, s, Title, unresolved } from '../../ui';
 
@@ -21,11 +21,23 @@ export default function ClaimScreen() {
   const it = items?.find((x) => x.asset === asset);
   const isBusy = claims.list.some((t) => t.body.asset === asset && unresolved(t));
 
-  const loadOpts = useCallback(() => {
-    setOpts(null); setError(null);
-    api.claimOptions(asset).then((o) => { setOpts(o); setDest(o.destinations[0]?.id ?? null); }, setError);
-  }, [asset]);
-  useEffect(loadOpts, [loadOpts]);
+  const [reload, setReload] = useState(0);
+  const loadOpts = useCallback(() => setReload((n) => n + 1), []);
+  useEffect(() => {
+    let current = true; // a late answer for the previous tab must not overwrite this one
+    const show = (o: ClaimOptions) => {
+      setOpts(o);
+      setDest((d) => (o.destinations.some((x) => x.id === d) ? d : o.destinations[0]?.id ?? null));
+    };
+    const cached = optionsCache.get(asset);
+    if (cached) show(cached); else setOpts(null);
+    setError(null);
+    api.claimOptions(asset).then(
+      (o) => { optionsCache.set(asset, o); if (current) show(o); },
+      (e) => { if (current && !cached) setError(e); }, // with cached options, a failed refresh is not worth blocking on
+    );
+    return () => { current = false; };
+  }, [asset, reload]);
 
   // Deep link before balances load, or an unknown asset.
   if (!items && balError != null) return <Page><Title>Claim</Title><ErrorLine error={balError} onRetry={load} /></Page>;

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { api, type Activity, type Balances } from './api';
+import { api, type Activity, type Balances, type ClaimOptions } from './api';
 import { applyClaims } from './amount';
 import { useClaims } from './claims';
 
@@ -50,3 +50,5 @@ export const useApp = () => useContext(Ctx)!;
 
 // There is no GET /v1/activity/{id}: the list fills this so a detail screen can show an item it loaded.
 export const activityCache = new Map<string, Activity>();
+// Claim options per asset: switching tabs shows the last known options at once and refreshes them in the background.
+export const optionsCache = new Map<string, ClaimOptions>();
