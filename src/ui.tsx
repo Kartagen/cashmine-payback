@@ -83,7 +83,8 @@ export function ClaimBanner({ t, onOpen, onDismiss }: { t: Tracked; onOpen: () =
 }
 
 export const s = StyleSheet.create({
-  page: { paddingHorizontal: space.l, paddingTop: space.s, paddingBottom: space.xxl, gap: space.m, width: '100%', maxWidth: 520, alignSelf: 'center', flexGrow: 1 },
+  column: { width: '100%', maxWidth: 520, alignSelf: 'center', paddingHorizontal: space.l }, // shared by page and web header
+  page: { width: '100%', maxWidth: 520, alignSelf: 'center', paddingHorizontal: space.l, paddingTop: space.s, paddingBottom: space.xxl, gap: space.m, flexGrow: 1 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.m },
   value: { flexShrink: 1, textAlign: 'right' },
   divider: { borderBottomWidth: hairline, borderColor: color.hairline },

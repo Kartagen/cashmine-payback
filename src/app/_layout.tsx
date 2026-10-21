@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Platform, Pressable, Text, TextInput } from 'react-native';
+import { Platform, Pressable, Text, TextInput, View } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -33,15 +33,7 @@ export default function RootLayout() {
             headerTitleStyle: { fontFamily: type.bodyStrong.fontFamily },
             headerLargeTitleStyle: { fontFamily: type.largeTitle.fontFamily },
             contentStyle: { backgroundColor: color.bg },
-            ...(web && { // web draws the large title in content (see Title), the header only holds Back
-              headerTitle: '',
-              headerLeft: () => (
-                <Pressable onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-                  accessibilityRole="button" accessibilityLabel="Back" hitSlop={8} style={{ paddingHorizontal: 8 }}>
-                  <CaretLeftIcon size={24} color={color.text} />
-                </Pressable>
-              ),
-            }),
+            ...(web && { header: () => <WebHeader /> }), // web draws the large title in content (see Title)
           }}>
             <Stack.Screen name="index" options={{ title: 'Balance', headerShown: !web }} />
             <Stack.Screen name="claim/[asset]" options={{ title: 'Claim' }} />
@@ -53,6 +45,18 @@ export default function RootLayout() {
     </>
   );
 }
+
+// Same column as the page, so Back lines up with the content instead of the window edge.
+const WebHeader = () => (
+  <View style={{ backgroundColor: color.bg }}>
+    <View style={[s.column, { height: 44, justifyContent: 'center' }]}>
+      <Pressable onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+        accessibilityRole="button" accessibilityLabel="Back" hitSlop={12} style={{ alignSelf: 'flex-start', marginLeft: -4 }}>
+        <CaretLeftIcon size={24} color={color.text} />
+      </Pressable>
+    </View>
+  </View>
+);
 
 // Tokens are printable ASCII; strip whitespace and zero-width chars that sneak in when copying from email.
 const cleanToken = (t: string) => t.replace(/[\s\u200B-\u200D\uFEFF]/g, '');
