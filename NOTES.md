@@ -34,6 +34,8 @@ All of this was built with Claude Code (`ai-logs/`).
 ## Not done / known issues
 - Activity doesn't link claims to their reversal or accrual (`relatedId`), and it doesn't auto-refresh after a new claim (reopen the screen).
 - No pull-to-refresh gesture on web, only a Refresh button.
+- A server `400 VALIDATION` on submit is shown on the status screen ("Claim not submitted… nothing was claimed"), not inline next to the field it names.
+- While a claim's outcome is unknown, the balance isn't reduced, because there's no server claim to reconcile against. Instead, the Claim button for that asset is locked until the outcome is known.
 - Claim history is kept only on this device. Another device won't see "unknown" claims from this one.
 - No component or E2E tests. The flow was checked manually in headless Chrome at 390 px against the live API, including real 503/504 responses.
 - Next: deep links/URL routing, showing `failureReason` in Activity, and an E2E test with a mocked API for the timeout path.

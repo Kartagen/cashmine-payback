@@ -61,4 +61,7 @@ test('claim overlay: applied until the snapshot catches up, never for failed cla
   // failed: money is back, no overlay
   [b] = applyClaims(snap('2026-10-21T14:00:00Z', '0.01', '0'), [claim('failed')]);
   assert.deepEqual([b.available, b.adjusted], ['0.01', false]);
+  // mixed precision: as strings "…14:00:10.5Z" < "…14:00:10Z", as dates the snapshot is newer
+  [b] = applyClaims(snap('2026-10-21T14:00:10.5Z', '0.009', '0.001'), [claim('pending')]);
+  assert.deepEqual([b.available, b.adjusted], ['0.009', false]);
 });

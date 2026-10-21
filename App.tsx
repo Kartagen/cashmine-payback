@@ -9,7 +9,7 @@ type Screen = { name: 'home' } | { name: 'claim'; asset: string } | { name: 'sta
 type Shown = ReturnType<typeof applyClaims>[number];
 
 const errText = (e: unknown) =>
-  e instanceof ApiError && e.status === 401 ? 'Your token is invalid or expired. Change it below.' : e instanceof Error ? e.message : String(e);
+  e instanceof ApiError && e.status === 401 ? "Your token is invalid or expired. Tap 'Change token' at the top." : e instanceof Error ? e.message : String(e);
 const unresolved = (t: Tracked) => !t.error && (!t.claim || t.claim.status === 'pending');
 
 export default function App() {
@@ -42,7 +42,7 @@ function Main() {
     try {
       const b = await api.balances();
       // Ignore a response older than what we already show (responses can arrive out of order).
-      setBal((cur) => (cur && cur.asOf > b.asOf ? cur : b));
+      setBal((cur) => (cur && Date.parse(cur.asOf) > Date.parse(b.asOf) ? cur : b));
       setError(null);
     } catch (e) {
       setError(e);
@@ -154,6 +154,7 @@ function ClaimScreen({ items, asset: initial, busy, onBack, onSubmit }: {
   const [amount, setAmount] = useState('');
   const [dest, setDest] = useState<string | null>(null);
   const [review, setReview] = useState(false);
+  const [sent, setSent] = useState(false); // one tap = one claim; a double tap must not create a second key
   const it = items.find((x) => x.asset === asset)!;
   const isBusy = busy.some((t) => t.body.asset === asset && unresolved(t));
 
@@ -210,7 +211,8 @@ function ClaimScreen({ items, asset: initial, busy, onBack, onSubmit }: {
           <Line label="Fee" value={`−${opts.fee} ${asset}`} />
           <Line label="You receive" value={`${fromUnits(check.receive, it.decimals)} ${asset}`} strong />
           <Line label="To" value={opts.destinations.find((d) => d.id === dest)!.label} />
-          <Btn title="Confirm and claim" onPress={() => onSubmit({ asset, amount: check.amount, destinationId: dest })} />
+          <Btn title="Confirm and claim" disabled={sent}
+            onPress={() => (setSent(true), onSubmit({ asset, amount: check.amount, destinationId: dest }))} />
         </View>
       )}
     </Page>
@@ -223,7 +225,8 @@ function claimState(t: Tracked): { title: string; detail: string; tone: 'info' |
     return { title: 'Could not confirm claim', detail: `${what}: ${t.error}. It may have gone through — check Activity before claiming again.`, tone: 'bad' };
   if (t.error) return { title: 'Claim not submitted', detail: `${what}: ${t.error}. Nothing was claimed.`, tone: 'bad' };
   if (!t.claim && t.unknown)
-    return { title: 'Checking your claim…', detail: `We lost the connection while sending ${what}. We keep checking safely — it can never be claimed twice.`, tone: 'info' };
+    return { title: 'Checking your claim…', tone: 'info', detail: `We lost the connection while sending ${what}. We keep checking safely — it can never be claimed twice.`
+      + (Date.now() - (t.sentAt ?? Date.now()) > 60000 ? ' Still no answer from the server: check Activity before trying again.' : '') };
   if (!t.claim) return { title: 'Sending claim…', detail: what, tone: 'info' };
   const c = t.claim;
   if (c.status === 'pending') return { title: 'Claim in progress', detail: `${what}, you receive ${c.receiveAmount}. Usually takes under 20 s.`, tone: 'info' };

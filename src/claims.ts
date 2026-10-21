@@ -7,7 +7,7 @@ import { api, ApiError, type Claim, type ClaimBody } from './api';
  * with the SAME Idempotency-Key, which can never create a second claim.
  */
 export type Tracked = {
-  key: string; body: ClaimBody; claim?: Claim; unknown?: boolean; error?: string;
+  key: string; body: ClaimBody; claim?: Claim; unknown?: boolean; error?: string; sentAt?: number;
   uncertain?: boolean; // an earlier attempt had an unknown outcome, so an error later does NOT mean "nothing claimed"
 };
 
@@ -50,7 +50,7 @@ export function useClaims() {
 
   const submit = useCallback(
     (body: ClaimBody) => {
-      const t: Tracked = { key: crypto.randomUUID(), body };
+      const t: Tracked = { key: crypto.randomUUID(), body, sentAt: Date.now() };
       setList((l) => {
         const next = [t, ...l].slice(0, 50); // ponytail: keep last 50, enough for overlay + status
         localStorage.setItem(KEY, JSON.stringify(next));

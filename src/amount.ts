@@ -63,7 +63,7 @@ export function formatUsd(cents: bigint): string {
 
 /**
  * Balance shown = server snapshot, plus our own claims that the snapshot does not include yet
- * (claim.createdAt > asOf). Once a newer snapshot arrives the overlay drops away by itself,
+ * (claim.createdAt > asOf, compared as dates: precision may differ). Once a newer snapshot arrives the overlay drops away by itself,
  * so the number never jumps back. Failed claims are never overlaid: their money is available again.
  */
 export function applyClaims(b: Balances, tracked: Tracked[]): (Balance & { adjusted: boolean })[] {
@@ -73,7 +73,7 @@ export function applyClaims(b: Balances, tracked: Tracked[]): (Balance & { adjus
     let adjusted = false;
     for (const t of tracked) {
       const c = t.claim;
-      if (!c || c.asset !== it.asset || c.status === 'failed' || c.createdAt <= b.asOf) continue;
+      if (!c || c.asset !== it.asset || c.status === 'failed' || Date.parse(c.createdAt) <= Date.parse(b.asOf)) continue;
       const amt = toUnits(c.amount, it.decimals);
       avail -= amt;
       if (c.status === 'pending') claiming += amt;
